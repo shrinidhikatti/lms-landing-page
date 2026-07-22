@@ -1,6 +1,7 @@
 const express = require("express");
 const prisma = require("../db");
 const adminAuth = require("../middleware/adminAuth");
+const { upsertFunnelRow } = require("../services/sheets");
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ router.post("/", async (req, res) => {
   const lead = await prisma.lead.create({
     data: { name: name.trim(), mobile },
   });
+
+  upsertFunnelRow({ sessionId: lead.id, name: lead.name, mobile: lead.mobile, stage: "lead" }).catch((err) =>
+    console.error("Sheets funnel sync failed:", err.message)
+  );
 
   res.status(201).json({ leadId: lead.id });
 });

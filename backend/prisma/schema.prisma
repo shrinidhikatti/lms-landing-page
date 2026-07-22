@@ -11,7 +11,7 @@ model Lead {
   id                String   @id @default(uuid())
   name              String
   mobile            String
-  status             String  @default("pending") // pending | paid | failed
+  status             String  @default("lead") // lead | payment_initiated | paid
   razorpayOrderId    String?
   razorpayPaymentId  String?
   whatsappSentAt     DateTime?

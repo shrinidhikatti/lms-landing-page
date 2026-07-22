@@ -3,7 +3,7 @@ CREATE TABLE "Lead" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "mobile" TEXT NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'pending',
+    "status" TEXT NOT NULL DEFAULT 'lead',
     "razorpayOrderId" TEXT,
     "razorpayPaymentId" TEXT,
     "whatsappSentAt" TIMESTAMP(3),

@@ -4,7 +4,6 @@ const cors = require("cors");
 
 const prisma = require("./db");
 const { verifyWebhookSignature } = require("./services/razorpay");
-const { sendWhatsappConfirmation } = require("./services/whatsapp");
 
 const leadsRouter = require("./routes/leads");
 const paymentRouter = require("./routes/payment");
@@ -15,6 +14,7 @@ app.use(cors({ origin: process.env.FRONTEND_ORIGIN }));
 
 // Razorpay webhook needs the raw request body to verify its signature,
 // so it's registered before the global express.json() body parser below.
+// This is a backup path in case the browser never reaches /api/payment/verify.
 app.post("/api/payment/webhook", express.raw({ type: "*/*" }), async (req, res) => {
   const signature = req.get("x-razorpay-signature") || "";
   const valid = verifyWebhookSignature({ rawBody: req.body, signature });
@@ -27,16 +27,7 @@ app.post("/api/payment/webhook", express.raw({ type: "*/*" }), async (req, res) 
     if (leadId) {
       const lead = await prisma.lead.findUnique({ where: { id: leadId } });
       if (lead && lead.status !== "paid") {
-        const updated = await prisma.lead.update({
-          where: { id: leadId },
-          data: { status: "paid", razorpayPaymentId: payment.id },
-        });
-        try {
-          await sendWhatsappConfirmation({ mobile: updated.mobile, name: updated.name });
-          await prisma.lead.update({ where: { id: leadId }, data: { whatsappSentAt: new Date() } });
-        } catch (err) {
-          console.error("WhatsApp send failed:", err.message);
-        }
+        await paymentRouter.markPaid({ leadId, paymentId: payment.id });
       }
     }
   }

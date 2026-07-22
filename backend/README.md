@@ -1,24 +1,42 @@
 # Vastu Masterclass Backend
 
 Node.js + Express + PostgreSQL (via Prisma). Handles lead capture, ₹99 Razorpay
-payment, and WhatsApp confirmation via MSG91.
+payment, WhatsApp confirmation via MSG91, and mirrors every funnel stage into
+a Google Sheet for easy viewing (Postgres stays the source of truth).
 
 ## Flow
 
 1. `POST /api/leads` — frontend popup submits `{ name, mobile }` → creates a
-   lead with `status: "pending"`, returns `{ leadId }`.
+   lead with `status: "lead"`, returns `{ leadId }`. Also upserts a row in the
+   **Funnel** sheet tab keyed by `leadId` (the "Session ID" column).
 2. `POST /api/payment/create-order` — frontend sends `{ leadId }` → creates a
-   Razorpay order, returns `{ orderId, amount, currency, keyId }` for the
+   Razorpay order, sets `status: "payment_initiated"`, updates the same
+   Funnel row, returns `{ orderId, amount, currency, keyId }` for the
    Razorpay Checkout widget.
 3. User pays via Razorpay Checkout in the browser.
 4. `POST /api/payment/verify` — frontend sends back the Razorpay response
-   fields → signature is verified, lead is marked `paid`, WhatsApp
-   confirmation is sent via MSG91.
+   fields → signature is verified, lead is marked `paid`, the Funnel row is
+   updated to stage `paid`, a row is added/updated in the **Confirmed** sheet
+   tab, and a WhatsApp confirmation is sent via MSG91.
 5. `POST /api/payment/webhook` — Razorpay also calls this directly as a
    backup, in case step 4 never reaches the server (browser closed, network
-   drop, etc).
+   drop, etc). Runs the exact same "mark paid" logic.
 6. `GET /api/leads` — admin-only (`Authorization: Bearer <ADMIN_TOKEN>`),
-   lists all registrations, optional `?status=paid`.
+   lists all registrations from Postgres, optional `?status=paid`.
+
+Sheets writes are fire-and-forget (not awaited before responding) — if
+Google Sheets is briefly down, checkout and WhatsApp still work; only the
+sheet mirror lags until the next successful write.
+
+## Google Sheet layout
+
+Create one spreadsheet with two tabs, headers in row 1:
+
+- **Funnel**: `Session ID | Name | Mobile | Stage | Order ID | Payment ID | First Seen | Last Updated`
+  — one row per visitor who submitted the popup, updated in place as they
+  progress through `lead` → `payment_initiated` → `paid`.
+- **Confirmed**: `Session ID | Name | Mobile | Order ID | Payment ID | Paid At`
+  — only customers whose ₹99 payment actually succeeded.
 
 ## Accounts you need to set up yourself
 
@@ -32,6 +50,23 @@ payment, and WhatsApp confirmation via MSG91.
   and your integrated WhatsApp number. Edit `src/services/whatsapp.js` if
   your template has more/different variables than the single `body_1`
   placeholder assumed here.
+- **Google Sheets service account** (for the Funnel/Confirmed mirror):
+  1. Go to console.cloud.google.com, create a project (or reuse one).
+  2. Enable the "Google Sheets API" under APIs & Services > Library.
+  3. APIs & Services > Credentials > Create Credentials > Service Account.
+     Give it any name, no special roles needed.
+  4. Open the new service account > Keys > Add Key > Create new key > JSON.
+     Download it.
+  5. From that JSON file, copy `client_email` into
+     `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `private_key` into
+     `GOOGLE_PRIVATE_KEY` (keep the `\n` escapes as-is, they're unescaped in
+     code at runtime).
+  6. Create the Google Sheet with the two tabs described above, then click
+     Share and add the service account's email (the `client_email` value)
+     as an Editor.
+  7. Copy the spreadsheet ID out of its URL
+     (`docs.google.com/spreadsheets/d/<THIS_PART>/edit`) into
+     `GOOGLE_SHEETS_SPREADSHEET_ID`.
 - **Hetzner VPS** — any small instance (Ubuntu) with Docker installed.
 - **Domain** — point an `api.` subdomain (e.g. `api.your-domain.com`) at the
   Hetzner server's IP address, and update `Caddyfile` and `.env`'s
@@ -63,13 +98,8 @@ just need a new migration committed and a redeploy.
 
 ## Frontend integration
 
-The frontend (`frontend/index.html`) currently redirects on submit instead of
-calling this API — it needs to be updated to:
-
-1. `POST /api/leads` on Submit, capture `leadId`.
-2. Load the Razorpay Checkout script and open it using
-   `POST /api/payment/create-order`'s response.
-3. On Razorpay success, call `POST /api/payment/verify`.
-
-This wiring hasn't been done yet — it's the next step once these backend
-credentials exist.
+The frontend (`frontend/index.html`) now calls this API end-to-end: popup
+submit → `/api/leads` → `/api/payment/create-order` → Razorpay Checkout →
+`/api/payment/verify` → redirect to `frontend/thank-you.html`. Set the
+`apiBaseUrl` prop (in the page's publish settings) to your real
+`https://api.your-domain.com` once the backend is deployed.

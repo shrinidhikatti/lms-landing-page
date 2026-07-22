@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: #FDF0DD; }
   body { font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; }
@@ -62,8 +63,8 @@
 
         <input type="tel" placeholder="ಮೊಬೈಲ್ ನಂಬರ್ (Mobile Number)" value="{{ leadMobile }}" onInput="{{ onLeadMobileInput }}" style="width: 100%; box-sizing: border-box; background: #FDF0DD; border: 1.5px solid rgba(96,1,9,0.25); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; margin-bottom: 18px; outline: none">
 
-        <div onClick="{{ submitLead }}" style="text-align: center; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 15px 0; border-radius: 12px; cursor: pointer; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511">
-          Submit →
+        <div onClick="{{ submitLead }}" style="text-align: center; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 15px 0; border-radius: 12px; cursor: pointer; opacity: {{ submitOpacity }}; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511">
+          {{ submitLabel }}
         </div>
 
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 18px; border: 2px solid #C9860A; border-radius: 999px; padding: 9px 20px; background: rgba(201,134,10,0.08)">
@@ -138,7 +139,7 @@
         </div>
       </div>
 
-      <a href="{{ regUrl }}" style="display: block; text-align: center; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 22px); padding: 16px 32px; border-radius: 14px; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511; color: #FFFFFF">
+      <a onClick="{{ openLeadModal }}" style="display: block; text-align: center; background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 22px); padding: 16px 32px; border-radius: 14px; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511; color: #FFFFFF">
         ಈಗಲೇ ನಿಮ್ಮ ಸ್ಥಾನ ಕಾಯ್ದಿರಿಸಿ →
       </a>
 
@@ -227,7 +228,7 @@
       <p style="margin: 32px auto 24px; max-width: 720px; font-size: 16px; line-height: 1.8; color: #4A2A22">
         ಈ LIVE Masterclass ನಲ್ಲಿ ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿಯವರು ನೈಜ ಉದಾಹರಣೆಗಳೊಂದಿಗೆ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ವಿವರಿಸುತ್ತಾರೆ.
       </p>
-      <a href="{{ regUrl }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #7A0511; color: #FFFFFF">
+      <a onClick="{{ openLeadModal }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #7A0511; color: #FFFFFF">
         ಈಗಲೇ ₹99ಕ್ಕೆ Masterclass ಗೆ ಸೇರಿ
       </a>
     </div>
@@ -318,7 +319,7 @@
           <div style="margin-top: auto; background: #FDF0DD; color: #2B0A0D; border-radius: 14px; padding: 20px 22px; text-align: center">
             <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; color: #600109; line-height: 1.5">ವಾಸ್ತು ಕ್ಷೇತ್ರದಲ್ಲಿ ನಿಮ್ಮ ವೃತ್ತಿಜೀವನವನ್ನು ಆರಂಭಿಸಲು ಸಿದ್ಧರಿದ್ದೀರಾ?</div>
             <div style="font-size: 14px; margin: 6px 0 14px; color: #4A2A22">ಇಂದೇ ₹99ಕ್ಕೆ ನೋಂದಾಯಿಸಿ ಮತ್ತು ವಾಸ್ತುಶಾಸ್ತ್ರದ ಪಯಣವನ್ನು ಆರಂಭಿಸಿ.</div>
-            <a href="{{ regUrl }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 17px; padding: 12px 28px; border-radius: 10px" style-hover="background: #7A0511; color: #FFFFFF">₹99ಕ್ಕೆ ಈಗಲೇ ಸೇರಿ</a>
+            <a onClick="{{ openLeadModal }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 17px; padding: 12px 28px; border-radius: 10px" style-hover="background: #7A0511; color: #FFFFFF">₹99ಕ್ಕೆ ಈಗಲೇ ಸೇರಿ</a>
           </div>
         </div>
       </div>
@@ -363,7 +364,7 @@
       <div style="margin-top: 40px; background: #600109; border-radius: 18px; padding: clamp(26px, 4vw, 40px); text-align: center; color: #FDF0DD">
         <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(22px, 3vw, 30px)">ಇನ್ನೂ ಯೋಚಿಸುತ್ತಿದ್ದೀರಾ?</div>
         <div style="font-size: 16px; margin: 8px auto 20px; max-width: 560px; line-height: 1.7; opacity: 0.9">ನೂರಾರು ವಿದ್ಯಾರ್ಥಿಗಳಂತೆ ನೀವೂ ಇಂದು ₹99ಕ್ಕೆ Live Vastu Masterclass ಗೆ ಸೇರಿ.</div>
-        <a href="{{ regUrl }}" style="display: inline-block; background: #FDF0DD; color: #600109; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #FFFFFF; color: #600109">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
+        <a onClick="{{ openLeadModal }}" style="display: inline-block; background: #FDF0DD; color: #600109; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #FFFFFF; color: #600109">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
       </div>
     </div>
   </div>
@@ -398,17 +399,19 @@
       <span style="font-size: 15px; color: #9A7A6A; text-decoration: line-through">₹999</span>
       <span style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 24px; color: #600109">₹99</span>
     </div>
-    <a href="{{ regUrl }}" style="background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 16px; padding: 10px 26px; border-radius: 10px; white-space: nowrap" style-hover="background: #7A0511; color: #FFFFFF">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
+    <a onClick="{{ openLeadModal }}" style="background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 16px; padding: 10px 26px; border-radius: 10px; white-space: nowrap" style-hover="background: #7A0511; color: #FFFFFF">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
   </div>
 
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;registrationUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;#register&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
-  &quot;countdownTarget&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2026-07-17T20:00:00+05:30&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; }
+  &quot;countdownTarget&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2026-07-17T20:00:00+05:30&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
+  &quot;apiBaseUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://api.your-domain.com&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
+  &quot;thankYouUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;thank-you.html&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; }
 }">
 class Component extends DCLogic {
-  state = { now: Date.now(), openFaq: 0, showLeadModal: false, leadName: '', leadMobile: '', leadError: '' };
+  state = { now: Date.now(), openFaq: 0, showLeadModal: false, leadName: '', leadMobile: '', leadError: '', leadSubmitting: false };
   offerStart = null;
 
   componentDidMount() {
@@ -429,16 +432,73 @@ class Component extends DCLogic {
     this.setState({ leadMobile: digits, leadError: '' });
   };
   closeLeadModal = () => this.setState({ showLeadModal: false });
-  submitLead = () => {
+  openLeadModal = () => {
+    if (this.offerStart == null) this.offerStart = Date.now();
+    this.setState({ showLeadModal: true });
+  };
+
+  submitLead = async () => {
+    if (this.state.leadSubmitting) return;
     const name = this.state.leadName.trim();
     const mobile = this.state.leadMobile;
     if (!name) { this.setState({ leadError: 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಹೆಸರು ನಮೂದಿಸಿ' }); return; }
     if (mobile.length !== 10) { this.setState({ leadError: 'ದಯವಿಟ್ಟು ಸರಿಯಾದ 10 ಅಂಕಿಗಳ ಮೊಬೈಲ್ ನಂಬರ್ ನಮೂದಿಸಿ' }); return; }
-    this.setState({ showLeadModal: false });
-    const base = this.props.registrationUrl ?? '#register';
-    if (base && base !== '#register') {
-      const sep = base.includes('?') ? '&' : '?';
-      window.location.href = base + sep + 'name=' + encodeURIComponent(name) + '&mobile=' + encodeURIComponent(mobile);
+
+    const apiBase = this.props.apiBaseUrl ?? '';
+    this.setState({ leadSubmitting: true, leadError: '' });
+
+    try {
+      const leadRes = await fetch(`${apiBase}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, mobile }),
+      });
+      if (!leadRes.ok) throw new Error('lead');
+      const { leadId } = await leadRes.json();
+
+      const orderRes = await fetch(`${apiBase}/api/payment/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leadId }),
+      });
+      if (!orderRes.ok) throw new Error('order');
+      const order = await orderRes.json();
+
+      const razorpay = new window.Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.orderId,
+        name: 'ಸಚಿನ್ ಜೋಶಿ Vastu Masterclass',
+        description: 'Live Vastu Masterclass ನೋಂದಣಿ',
+        prefill: { name, contact: mobile },
+        theme: { color: '#600109' },
+        handler: async (response) => {
+          try {
+            const verifyRes = await fetch(`${apiBase}/api/payment/verify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                leadId,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+            if (!verifyRes.ok) throw new Error('verify');
+            window.location.href = `${this.props.thankYouUrl ?? 'thank-you.html'}?name=${encodeURIComponent(name)}`;
+          } catch {
+            this.setState({ leadSubmitting: false, leadError: 'ಪಾವತಿ ಪರಿಶೀಲನೆ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ.' });
+          }
+        },
+        modal: {
+          ondismiss: () => this.setState({ leadSubmitting: false }),
+        },
+      });
+      razorpay.open();
+      this.setState({ leadSubmitting: false });
+    } catch {
+      this.setState({ leadSubmitting: false, leadError: 'ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.' });
     }
   };
 
@@ -487,9 +547,13 @@ class Component extends DCLogic {
       leadName: this.state.leadName,
       leadMobile: this.state.leadMobile,
       leadError: this.state.leadError,
+      leadSubmitting: this.state.leadSubmitting,
+      submitLabel: this.state.leadSubmitting ? 'ದಯವಿಟ್ಟು ಕಾಯಿರಿ...' : 'Submit →',
+      submitOpacity: this.state.leadSubmitting ? '0.7' : '1',
       onLeadNameInput: this.onLeadNameInput,
       onLeadMobileInput: this.onLeadMobileInput,
       closeLeadModal: this.closeLeadModal,
+      openLeadModal: this.openLeadModal,
       submitLead: this.submitLead,
       faqs, reviews
     };
