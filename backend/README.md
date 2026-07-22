@@ -68,9 +68,9 @@ Create one spreadsheet with two tabs, headers in row 1:
      (`docs.google.com/spreadsheets/d/<THIS_PART>/edit`) into
      `GOOGLE_SHEETS_SPREADSHEET_ID`.
 - **Hetzner VPS** — any small instance (Ubuntu) with Docker installed.
-- **Domain** — point an `api.` subdomain (e.g. `api.your-domain.com`) at the
-  Hetzner server's IP address, and update `Caddyfile` and `.env`'s
-  `FRONTEND_ORIGIN` accordingly.
+- **Domain** — point an `api.` subdomain (e.g. `apivastu.your-domain.com`) at
+  the Hetzner server's IP address, and update `.env`'s `FRONTEND_ORIGIN`
+  accordingly.
 
 ## Local development
 
@@ -84,17 +84,30 @@ npm run dev
 
 ## Deploying on Hetzner
 
+This assumes a shared box that already runs Nginx for other sites (as ours
+does) — Docker only runs Postgres + the app, bound to `127.0.0.1:4001`, and
+the existing system Nginx reverse-proxies to it. If you're deploying to a
+dedicated, empty server instead, swap in Caddy or your own Nginx + certbot
+setup for TLS.
+
 ```bash
-# on the server, after cloning this repo and cd-ing into backend/
+# on the server
+mkdir -p /var/www/vastu-backend && cd /var/www/vastu-backend
+git clone https://github.com/shrinidhikatti/lms-landing-page.git .
+cd backend
 cp .env.example .env    # fill in real production values
-# edit Caddyfile: replace api.your-domain.com with your real subdomain
 docker compose up -d --build
+
+# wire up Nginx (only needs doing once)
+cp deploy/nginx-vastu-backend.conf /etc/nginx/sites-available/vastu-backend
+ln -s /etc/nginx/sites-available/vastu-backend /etc/nginx/sites-enabled/vastu-backend
+nginx -t && systemctl reload nginx
+certbot --nginx -d apivastu.your-domain.com
 ```
 
-Caddy automatically issues and renews a Let's Encrypt TLS certificate for the
-domain in `Caddyfile`, and proxies HTTPS traffic to the app container. The
-app container runs `prisma migrate deploy` on every start, so schema changes
-just need a new migration committed and a redeploy.
+The app container runs `prisma migrate deploy` on every start, so schema
+changes just need a new migration committed and a redeploy
+(`docker compose up -d --build`).
 
 ## Frontend integration
 

@@ -15,21 +15,8 @@ services:
     env_file: .env
     depends_on:
       - db
-    expose:
-      - "4000"
-
-  caddy:
-    image: caddy:2-alpine
-    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy-data:/data
-    depends_on:
-      - app
+      - "127.0.0.1:4001:4000"
 
 volumes:
   db-data:
-  caddy-data:
