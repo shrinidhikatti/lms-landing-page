@@ -1,0 +1,23 @@
+{
+  "name": "vastu-masterclass-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "razorpay": "^2.9.5"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0"
+  }
+}

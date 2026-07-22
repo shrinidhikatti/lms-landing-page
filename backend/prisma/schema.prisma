@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id                String   @id @default(uuid())
+  name              String
+  mobile            String
+  status             String  @default("pending") // pending | paid | failed
+  razorpayOrderId    String?
+  razorpayPaymentId  String?
+  whatsappSentAt     DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([mobile])
+  @@index([status])
+}

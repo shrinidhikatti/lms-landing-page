@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vastu
+      POSTGRES_PASSWORD: vastu
+      POSTGRES_DB: vastu
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - db
+    expose:
+      - "4000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+    depends_on:
+      - app
+
+volumes:
+  db-data:
+  caddy-data:
