@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FDF0DD; }
+  body { font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; }
+  a { color: #600109; }
+  a:hover { color: #8A0A16; }
+  @keyframes pulseGlow { 0% { box-shadow: 0 6px 22px rgba(96,1,9,0.35); } 50% { box-shadow: 0 6px 32px rgba(96,1,9,0.6); } 100% { box-shadow: 0 6px 22px rgba(96,1,9,0.35); } }
+  @media (max-width: 780px) {
+    .hero-photo { order: -1; max-width: 340px; margin: 0 auto; }
+  }
+</style>
+</helmet>
+
+<div data-screen-label="Landing Page" style="min-height: 100vh; background: #FDF0DD; overflow-x: hidden">
+
+  <!-- Top offer strip -->
+  <div style="background: #600109; color: #FDF0DD; text-align: center; padding: 10px 16px; font-weight: 600; font-size: clamp(13px, 2.5vw, 16px); letter-spacing: 0.3px">
+    ⚡ LIVE MASTERCLASS &nbsp;|&nbsp; ಸೀಮಿತ ಸೀಟುಗಳು &nbsp;|&nbsp; ಕೇವಲ ₹99
+  </div>
+
+  <!-- Lead Capture Modal -->
+  <sc-if value="{{ showLeadModal }}" hint-placeholder-val="{{ true }}">
+    <div style="position: fixed; inset: 0; background: rgba(43,10,13,0.72); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px">
+      <div style="position: relative; width: 100%; max-width: 420px; background: #FFFFFF; border-radius: 22px; border: 2px solid #600109; box-shadow: 0 24px 60px rgba(0,0,0,0.4); padding: 30px 26px 26px; max-height: 92vh; overflow-y: auto">
+
+        <div onClick="{{ closeLeadModal }}" style="position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%; background: #600109; color: #FDF0DD; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; cursor: pointer; line-height: 1" style-hover="background: #7A0511">×</div>
+
+        <div style="display: inline-block; background: rgba(96,1,9,0.08); border: 1px solid rgba(96,1,9,0.25); color: #600109; font-weight: 600; font-size: 13px; padding: 5px 14px; border-radius: 999px; margin-bottom: 14px">⚡ ಸೀಮಿತ ಸೀಟುಗಳು ಮಾತ್ರ</div>
+
+        <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(21px, 4vw, 25px); color: #600109; line-height: 1.35; margin-bottom: 18px">
+          ನಿಮ್ಮ ಹೆಸರು ಮತ್ತು ಮೊಬೈಲ್ ನಂಬರ್ ನಮೂದಿಸಿ
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px">
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 600; color: #2B0A0D">
+            <span style="width: 22px; height: 22px; border-radius: 50%; background: #600109; color: #FDF0DD; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0">✔</span>
+            ₹99ಕ್ಕೆ ನಿಮ್ಮ ಸ್ಥಾನ ಈಗಲೇ ಕಾಯ್ದಿರಿಸಿ
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 600; color: #2B0A0D">
+            <span style="width: 22px; height: 22px; border-radius: 50%; background: #600109; color: #FDF0DD; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0">✔</span>
+            Zoom Link ಅನ್ನು WhatsApp ಮೂಲಕ ಪಡೆಯಿರಿ
+          </div>
+        </div>
+
+        <sc-if value="{{ leadError }}" hint-placeholder-val="{{ '' }}">
+          <div style="background: rgba(200,20,20,0.08); border: 1px solid rgba(200,20,20,0.3); color: #9A1414; font-size: 13.5px; font-weight: 600; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px">{{ leadError }}</div>
+        </sc-if>
+
+        <input type="text" placeholder="ಹೆಸರು ನಮೂದಿಸಿ (Enter Name)" value="{{ leadName }}" onInput="{{ onLeadNameInput }}" style="width: 100%; box-sizing: border-box; background: #FDF0DD; border: 1.5px solid rgba(96,1,9,0.25); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; margin-bottom: 12px; outline: none">
+
+        <input type="tel" placeholder="ಮೊಬೈಲ್ ನಂಬರ್ (Mobile Number)" value="{{ leadMobile }}" onInput="{{ onLeadMobileInput }}" style="width: 100%; box-sizing: border-box; background: #FDF0DD; border: 1.5px solid rgba(96,1,9,0.25); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; margin-bottom: 18px; outline: none">
+
+        <div onClick="{{ submitLead }}" style="text-align: center; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 15px 0; border-radius: 12px; cursor: pointer; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511">
+          Submit →
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 18px; border: 2px solid #C9860A; border-radius: 999px; padding: 9px 20px; background: rgba(201,134,10,0.08)">
+          <span style="font-size: 14px; font-weight: 700; color: #600109">⏳ Offer ends in</span>
+          <span style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 18px; font-weight: 800; color: #C9860A; letter-spacing: 1px; text-shadow: 0 0 10px rgba(201,134,10,0.5)">{{ offerMin }}:{{ offerSec }}</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(96,1,9,0.12)">
+          <img src="uploads/image.png_2K_202607101321.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; border: 2px solid #600109; flex-shrink: 0">
+          <div>
+            <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 15px; color: #600109">ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿ</div>
+            <div style="font-size: 12.5px; color: #4A2A22; font-weight: 600">🔴 LIVE • 17/07/2026 • ರಾತ್ರಿ 8:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- HERO -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: clamp(28px, 5vw, 64px) 20px 40px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: center">
+
+    <div style="flex: 1 1 480px; min-width: 300px; max-width: 620px; display: flex; flex-direction: column; gap: 20px">
+      <div style="align-self: flex-start; background: rgba(96,1,9,0.08); border: 1px solid rgba(96,1,9,0.25); color: #600109; font-weight: 600; font-size: 14px; padding: 6px 14px; border-radius: 999px">
+        ಆರಂಭಿಕರಿಗಾಗಿ ವಿಶೇಷ Live Vastu Masterclass
+      </div>
+      <h1 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(30px, 4.6vw, 50px); line-height: 1.25; margin: 0; color: #600109">
+        ನಿಮ್ಮ ಮನೆಗೆ ಸರಿಯಾದ ವಾಸ್ತು ತಿಳಿಯಿರಿ — ಕೇವಲ 2 ಗಂಟೆಗಳಲ್ಲಿ
+      </h1>
+      <p style="margin: 0; font-size: clamp(15px, 2vw, 18px); line-height: 1.8; color: #4A2A22">
+        ವೈಜ್ಞಾನಿಕ ಹಾಗೂ ಶಾಸ್ತ್ರೀಯ ದೃಷ್ಟಿಕೋನದಿಂದ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ಕಲಿಯಿರಿ.
+        25+ ವರ್ಷಗಳ ಅನುಭವ ಹೊಂದಿರುವ ವಾಸ್ತು ತಜ್ಞ ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿಯವರೊಂದಿಗೆ LIVE Zoom Masterclass.
+      </p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <span style="background: #FFFFFF; border: 1px solid rgba(96,1,9,0.15); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; color: #600109">⭐ 4.9 Google Reviews</span>
+        <span style="background: #FFFFFF; border: 1px solid rgba(96,1,9,0.15); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; color: #600109">👥 ಸಾವಿರಾರು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ತರಬೇತಿ</span>
+        <span style="background: #FFFFFF; border: 1px solid rgba(96,1,9,0.15); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; color: #600109">🏆 25+ ವರ್ಷಗಳ ಅನುಭವ</span>
+      </div>
+
+      <!-- Price box + countdown -->
+      <div style="background: #FFFFFF; border: 2px solid #600109; border-radius: 16px; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between">
+        <div style="display: flex; align-items: baseline; gap: 16px">
+          <div>
+            <div style="font-size: 13px; color: #7A5A4A">ಸಾಮಾನ್ಯ ಶುಲ್ಕ</div>
+            <div style="font-size: 26px; font-weight: 600; color: #9A7A6A; text-decoration: line-through">₹999</div>
+          </div>
+          <div>
+            <div style="font-size: 13px; color: #600109; font-weight: 600">ಇಂದಿನ ವಿಶೇಷ ಶುಲ್ಕ</div>
+            <div style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 44px; font-weight: 800; color: #600109; line-height: 1.1">₹99</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: #7A5A4A; margin-bottom: 6px">Masterclass ಆರಂಭಕ್ಕೆ ಉಳಿದ ಸಮಯ</div>
+          <div style="display: flex; gap: 8px">
+            <div style="background: #600109; color: #FDF0DD; border-radius: 10px; padding: 8px 0; width: 56px; text-align: center">
+              <div style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 22px; font-weight: 700; line-height: 1">{{ cdDays }}</div>
+              <div style="font-size: 10px; opacity: 0.8">DAYS</div>
+            </div>
+            <div style="background: #600109; color: #FDF0DD; border-radius: 10px; padding: 8px 0; width: 56px; text-align: center">
+              <div style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 22px; font-weight: 700; line-height: 1">{{ cdHours }}</div>
+              <div style="font-size: 10px; opacity: 0.8">HRS</div>
+            </div>
+            <div style="background: #600109; color: #FDF0DD; border-radius: 10px; padding: 8px 0; width: 56px; text-align: center">
+              <div style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 22px; font-weight: 700; line-height: 1">{{ cdMins }}</div>
+              <div style="font-size: 10px; opacity: 0.8">MINS</div>
+            </div>
+            <div style="background: #600109; color: #FDF0DD; border-radius: 10px; padding: 8px 0; width: 56px; text-align: center">
+              <div style="font-family: 'Baloo Tamma 2', sans-serif; font-size: 22px; font-weight: 700; line-height: 1">{{ cdSecs }}</div>
+              <div style="font-size: 10px; opacity: 0.8">SECS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="{{ regUrl }}" style="display: block; text-align: center; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 22px); padding: 16px 32px; border-radius: 14px; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511; color: #FFFFFF">
+        ಈಗಲೇ ನಿಮ್ಮ ಸ್ಥಾನ ಕಾಯ್ದಿರಿಸಿ →
+      </a>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13.5px; color: #4A2A22; font-weight: 500">
+        <span>✅ ಸುರಕ್ಷಿತ ಪಾವತಿ</span>
+        <span>🎓 ಭಾಗವಹಿಸುವಿಕೆ ಪ್ರಮಾಣಪತ್ರ</span>
+        <span>💬 Live ಪ್ರಶ್ನೋತ್ತರ</span>
+      </div>
+    </div>
+
+    <!-- Hero photo card -->
+    <div class="hero-photo" style="flex: 0 1 400px; min-width: 290px; position: relative">
+      <div style="background: #FFFFFF; border-radius: 20px; padding: 12px; box-shadow: 0 18px 50px rgba(96,1,9,0.18); border: 1px solid rgba(96,1,9,0.1)">
+        <div style="position: relative; border-radius: 14px; overflow: hidden">
+          <img src="uploads/Living_room_studio_background_bl..._202607101351.jpeg" alt="ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
+          <div style="position: absolute; top: 14px; right: -8px; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 8px 18px; border-radius: 10px 0 0 10px; box-shadow: 0 6px 16px rgba(0,0,0,0.3)">₹99 ಮಾತ್ರ</div>
+        </div>
+        <div style="padding: 16px 10px 8px; text-align: center">
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; color: #600109">ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿಯವರೊಂದಿಗೆ</div>
+          <div style="font-weight: 700; font-size: 15px; letter-spacing: 1.5px; color: #2B0A0D; margin-top: 2px">LIVE VASTU MASTERCLASS</div>
+          <div style="display: flex; justify-content: center; gap: 18px; margin-top: 10px; font-size: 14px; font-weight: 600; color: #4A2A22">
+            <span>📅 17/07/2026</span>
+            <span>⏰ ರಾತ್ರಿ 8:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info cards -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: 0 20px 56px">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
+        <span style="font-size: 28px">📅</span>
+        <div><div style="font-size: 13px; color: #7A5A4A">ದಿನಾಂಕ</div><div style="font-weight: 700; color: #600109; font-size: 17px">17/07/2026</div></div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
+        <span style="font-size: 28px">⏰</span>
+        <div><div style="font-size: 13px; color: #7A5A4A">ಸಮಯ</div><div style="font-weight: 700; color: #600109; font-size: 17px">ರಾತ್ರಿ 8:00</div></div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
+        <span style="font-size: 28px">⌛</span>
+        <div><div style="font-size: 13px; color: #7A5A4A">ಅವಧಿ</div><div style="font-weight: 700; color: #600109; font-size: 17px">2 ಗಂಟೆಗಳು + Live Q&A</div></div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
+        <span style="font-size: 28px">💻</span>
+        <div><div style="font-size: 13px; color: #7A5A4A">Live Zoom</div><div style="font-weight: 700; color: #600109; font-size: 17px">ಸೀಮಿತ ಆಸನಗಳು</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What Vastu can do -->
+  <div style="background: #FFFFFF; border-top: 1px solid rgba(96,1,9,0.1); border-bottom: 1px solid rgba(96,1,9,0.1); padding: clamp(48px, 7vw, 80px) 20px">
+    <div style="max-width: 1080px; margin: 0 auto; text-align: center">
+      <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(26px, 3.8vw, 40px); color: #600109; margin: 0 0 8px; line-height: 1.3">
+        ವಾಸ್ತುಶಾಸ್ತ್ರ ಬದಲಾಯಿಸಬಹುದು ನಿಮ್ಮ ಜೀವನದ ದಿಕ್ಕು
+      </h2>
+      <p style="margin: 0 auto 36px; max-width: 640px; font-size: 16px; line-height: 1.8; color: #4A2A22">ಆರಂಭಿಕರಿಗಾಗಿ ವಿಶೇಷವಾಗಿ ರೂಪಿಸಲಾದ Live Vastu Masterclass</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; text-align: left">
+        <div style="background: #FDF0DD; border-radius: 16px; padding: 24px; border: 1px solid rgba(96,1,9,0.12)">
+          <div style="font-size: 30px; margin-bottom: 10px">🌿</div>
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; color: #600109; margin-bottom: 6px">ಪಂಚಭೂತಗಳು</div>
+          <div style="font-size: 15px; line-height: 1.8; color: #4A2A22">ಭೂಮಿ, ಜಲ, ಅಗ್ನಿ, ವಾಯು ಹಾಗೂ ಆಕಾಶ ತತ್ವಗಳ ಸಮತೋಲನವೇ ಉತ್ತಮ ವಾಸ್ತುವಿನ ಆಧಾರ.</div>
+        </div>
+        <div style="background: #FDF0DD; border-radius: 16px; padding: 24px; border: 1px solid rgba(96,1,9,0.12)">
+          <div style="font-size: 30px; margin-bottom: 10px">🧭</div>
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; color: #600109; margin-bottom: 6px">16 ದಿಕ್ಕುಗಳ ಮಹತ್ವ</div>
+          <div style="font-size: 15px; line-height: 1.8; color: #4A2A22">ಪ್ರತಿ ದಿಕ್ಕಿಗೂ ತನ್ನದೇ ಆದ ಶಕ್ತಿ ಹಾಗೂ ಜೀವನದ ಮೇಲೆ ವಿಶೇಷ ಪ್ರಭಾವವಿದೆ.</div>
+        </div>
+        <div style="background: #FDF0DD; border-radius: 16px; padding: 24px; border: 1px solid rgba(96,1,9,0.12)">
+          <div style="font-size: 30px; margin-bottom: 10px">🏠</div>
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; color: #600109; margin-bottom: 6px">ಮನೆಯ ವಿನ್ಯಾಸ</div>
+          <div style="font-size: 15px; line-height: 1.8; color: #4A2A22">ಮನೆಯ ಕೊಠಡಿಗಳ ಸರಿಯಾದ ಸ್ಥಳ, ಪ್ರವೇಶದ್ವಾರ ಹಾಗೂ ಜಾಗದ ವಿನ್ಯಾಸ ಯಶಸ್ಸಿಗೆ ಮುಖ್ಯ.</div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(21px, 3vw, 28px); color: #2B0A0D; margin: 48px 0 20px">ಈ ವಿಷಯಗಳನ್ನು ವೈಜ್ಞಾನಿಕವಾಗಿ ತಿಳಿದುಕೊಳ್ಳಿ</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+        <div style="background: #FFFFFF; border: 2px solid rgba(96,1,9,0.2); border-radius: 12px; padding: 18px; font-weight: 600; color: #600109; font-size: 15.5px">🏡 ಸರಿಯಾದ ಪ್ಲಾಟ್ ಆಯ್ಕೆ</div>
+        <div style="background: #FFFFFF; border: 2px solid rgba(96,1,9,0.2); border-radius: 12px; padding: 18px; font-weight: 600; color: #600109; font-size: 15.5px">🧭 16 ದಿಕ್ಕುಗಳ ಪ್ರಭಾವ</div>
+        <div style="background: #FFFFFF; border: 2px solid rgba(96,1,9,0.2); border-radius: 12px; padding: 18px; font-weight: 600; color: #600109; font-size: 15.5px">⚠️ ವಾಸ್ತು ದೋಷಗಳ ಗುರುತು</div>
+        <div style="background: #FFFFFF; border: 2px solid rgba(96,1,9,0.2); border-radius: 12px; padding: 18px; font-weight: 600; color: #600109; font-size: 15.5px">✅ ಸರಳ ಮತ್ತು ಪರಿಣಾಮಕಾರಿ ಪರಿಹಾರಗಳು</div>
+      </div>
+
+      <p style="margin: 32px auto 24px; max-width: 720px; font-size: 16px; line-height: 1.8; color: #4A2A22">
+        ಈ LIVE Masterclass ನಲ್ಲಿ ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿಯವರು ನೈಜ ಉದಾಹರಣೆಗಳೊಂದಿಗೆ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ವಿವರಿಸುತ್ತಾರೆ.
+      </p>
+      <a href="{{ regUrl }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #7A0511; color: #FFFFFF">
+        ಈಗಲೇ ₹99ಕ್ಕೆ Masterclass ಗೆ ಸೇರಿ
+      </a>
+    </div>
+  </div>
+
+  <!-- Why people learn Vastu -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: clamp(48px, 7vw, 80px) 20px">
+    <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(25px, 3.6vw, 38px); color: #600109; margin: 0 auto 40px; text-align: center; max-width: 860px; line-height: 1.35">
+      ವಾಸ್ತುಶಾಸ್ತ್ರ ಕಲಿತು ನಿಮ್ಮ ವೃತ್ತಿಜೀವನಕ್ಕೆ ಹೊಸ ಅವಕಾಶಗಳನ್ನು ಸೃಷ್ಟಿಸಿಕೊಳ್ಳಿ
+    </h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 36px; align-items: center; justify-content: center">
+      <div style="flex: 1 1 480px; min-width: 300px; max-width: 620px">
+        <h3 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 22px; color: #2B0A0D; margin: 0 0 20px; line-height: 1.5">
+          ಅನೇಕರು ಈ ಕಾರಣಗಳಿಂದ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಕಲಿಯಲು ಬಯಸುತ್ತಾರೆ
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">🏡 ವಾಸ್ತು ಸಲಹೆಗಾರರಾಗಿ ವೃತ್ತಿ ಆರಂಭಿಸಲು</div>
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">📈 ಹೆಚ್ಚುವರಿ ಆದಾಯದ ಅವಕಾಶಗಳನ್ನು ಸೃಷ್ಟಿಸಿಕೊಳ್ಳಲು</div>
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">🧭 ವೈಜ್ಞಾನಿಕ ಹಾಗೂ ಶಾಸ್ತ್ರೀಯ ವಾಸ್ತು ಜ್ಞಾನ ಪಡೆಯಲು</div>
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">🤝 ಗ್ರಾಹಕರಿಗೆ ಆತ್ಮವಿಶ್ವಾಸದಿಂದ ಸಲಹೆ ನೀಡಲು</div>
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">📐 ನೈಜ Case Studies ಮೂಲಕ ಪ್ರಾಯೋಗಿಕ ಜ್ಞಾನ ಪಡೆಯಲು</div>
+          <div style="background: #FFFFFF; border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; font-weight: 500; color: #2B0A0D">🎓 Basic ರಿಂದ Advanced Vastu Course ಬಗ್ಗೆ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ತಿಳಿಯಲು</div>
+        </div>
+      </div>
+
+      <div style="flex: 0 1 400px; min-width: 290px; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 18px 50px rgba(96,1,9,0.18)">
+        <img src="uploads/Living_room_studio_background_bl..._202607101354.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(43,5,8,0.92), rgba(43,5,8,0)); padding: 60px 22px 22px; color: #FDF0DD">
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; line-height: 1.5">ವಾಸ್ತು ಕ್ಷೇತ್ರದಲ್ಲಿ ನಿಮ್ಮ ಭವಿಷ್ಯವನ್ನು ನಿರ್ಮಿಸಿಕೊಳ್ಳಿ!</div>
+          <div style="font-size: 14.5px; margin-top: 4px; opacity: 0.9">ಇಂದೇ ₹99ಕ್ಕೆ Live Masterclass ಗೆ ಸೇರಿ.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin: 36px auto 0; max-width: 760px; background: #FFFFFF; border: 1px dashed rgba(96,1,9,0.4); border-radius: 12px; padding: 14px 20px; text-align: center; font-weight: 600; color: #600109; font-size: 15px">
+      🔥 ಕರ್ನಾಟಕದ ವಿವಿಧ ಭಾಗಗಳಿಂದ ನೂರಾರು ವಿದ್ಯಾರ್ಥಿಗಳು ಈಗಾಗಲೇ ತಮ್ಮ ಸ್ಥಾನ ಕಾಯ್ದಿರಿಸಿದ್ದಾರೆ!
+    </div>
+  </div>
+
+  <!-- Instructor (maroon) -->
+  <div style="background: #600109; color: #FDF0DD; padding: clamp(48px, 7vw, 88px) 20px">
+    <div style="max-width: 1180px; margin: 0 auto">
+      <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(25px, 3.6vw, 38px); margin: 0 auto 10px; text-align: center; max-width: 800px; line-height: 1.35; color: #FDF0DD">
+        ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿಯವರಿಂದ ನೇರ LIVE Masterclass
+      </h2>
+      <p style="margin: 0 auto 44px; text-align: center; max-width: 680px; font-size: 16px; line-height: 1.8; opacity: 0.85">
+        25+ ವರ್ಷಗಳ ಅನುಭವದಿಂದ ರೂಪುಗೊಂಡ ಪ್ರಾಯೋಗಿಕ ಹಾಗೂ ವೈಜ್ಞಾನಿಕ ವಾಸ್ತು ಜ್ಞಾನವನ್ನು ನೇರವಾಗಿ ಕಲಿಯಿರಿ.
+      </p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; align-items: stretch">
+        <!-- Instructor card -->
+        <div style="flex: 1 1 380px; min-width: 300px; max-width: 460px; background: #FDF0DD; color: #2B0A0D; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
+          <img src="uploads/image.png_2K_202607101321.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: 300px; object-fit: cover; object-position: 50% 20%">
+          <div style="padding: 22px 24px 26px">
+            <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 26px; color: #600109">ಸಚಿನ್ ಜೋಶಿ</div>
+            <div style="font-size: 14px; font-weight: 600; color: #4A2A22; margin-bottom: 18px">ವಾಸ್ತು ತಜ್ಞರು | ಜ್ಯೋತಿಷ್ಯ ತಜ್ಞರು | ತರಬೇತುದಾರರು</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+              <div style="background: #FFFFFF; border-radius: 12px; padding: 12px 14px; border: 1px solid rgba(96,1,9,0.12)">
+                <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 22px; color: #600109">🏆 25+</div>
+                <div style="font-size: 12.5px; color: #4A2A22">ವರ್ಷಗಳ ಅನುಭವ</div>
+              </div>
+              <div style="background: #FFFFFF; border-radius: 12px; padding: 12px 14px; border: 1px solid rgba(96,1,9,0.12)">
+                <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 22px; color: #600109">👥 5000+</div>
+                <div style="font-size: 12.5px; color: #4A2A22">ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ತರಬೇತಿ</div>
+              </div>
+              <div style="background: #FFFFFF; border-radius: 12px; padding: 12px 14px; border: 1px solid rgba(96,1,9,0.12)">
+                <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 22px; color: #600109">🏡 3000+</div>
+                <div style="font-size: 12.5px; color: #4A2A22">ವಾಸ್ತು ಸಲಹೆಗಳು</div>
+              </div>
+              <div style="background: #FFFFFF; border-radius: 12px; padding: 12px 14px; border: 1px solid rgba(96,1,9,0.12)">
+                <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 22px; color: #600109">📍</div>
+                <div style="font-size: 12.5px; color: #4A2A22">ಕರ್ನಾಟಕದಾದ್ಯಂತ ವಿಶ್ವಾಸಾರ್ಹ ಮಾರ್ಗದರ್ಶನ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Why join card -->
+        <div style="flex: 1 1 420px; min-width: 300px; max-width: 560px; background: rgba(253,240,221,0.07); border: 1px solid rgba(253,240,221,0.25); border-radius: 20px; padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 14px">
+          <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 24px; color: #FDF0DD; margin-bottom: 4px">ಈ LIVE Masterclass ಗೆ ಏಕೆ ಸೇರಬೇಕು?</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ ವಾಸ್ತುಶಾಸ್ತ್ರದ ಮೂಲಭೂತ ತತ್ವಗಳನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ಕಲಿಯಿರಿ</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ ಪಂಚಭೂತಗಳು, 16 ದಿಕ್ಕುಗಳು ಹಾಗೂ ಮಹಾವಾಸ್ತು ಕುರಿತು ಸ್ಪಷ್ಟ ಅರಿವು</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ ನೈಜ Case Studies ಮೂಲಕ ಪ್ರಾಯೋಗಿಕ ಜ್ಞಾನ</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ ಗ್ರಾಹಕರಿಗೆ ಆತ್ಮವಿಶ್ವಾಸದಿಂದ ವಾಸ್ತು ಸಲಹೆ ನೀಡುವ ವಿಧಾನ</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ LIVE ಪ್ರಶ್ನೋತ್ತರದಲ್ಲಿ ನಿಮ್ಮ ಸಂದೇಹಗಳಿಗೆ ನೇರ ಉತ್ತರ</div>
+          <div style="font-size: 15.5px; line-height: 1.7">✔ ಸಂಪೂರ್ಣ Vastu LMS Course ಕುರಿತು ವಿಶೇಷ ಮಾಹಿತಿ</div>
+          <div style="margin-top: auto; background: #FDF0DD; color: #2B0A0D; border-radius: 14px; padding: 20px 22px; text-align: center">
+            <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; color: #600109; line-height: 1.5">ವಾಸ್ತು ಕ್ಷೇತ್ರದಲ್ಲಿ ನಿಮ್ಮ ವೃತ್ತಿಜೀವನವನ್ನು ಆರಂಭಿಸಲು ಸಿದ್ಧರಿದ್ದೀರಾ?</div>
+            <div style="font-size: 14px; margin: 6px 0 14px; color: #4A2A22">ಇಂದೇ ₹99ಕ್ಕೆ ನೋಂದಾಯಿಸಿ ಮತ್ತು ವಾಸ್ತುಶಾಸ್ತ್ರದ ಪಯಣವನ್ನು ಆರಂಭಿಸಿ.</div>
+            <a href="{{ regUrl }}" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 17px; padding: 12px 28px; border-radius: 10px" style-hover="background: #7A0511; color: #FFFFFF">₹99ಕ್ಕೆ ಈಗಲೇ ಸೇರಿ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you'll learn -->
+  <div style="max-width: 980px; margin: 0 auto; padding: clamp(48px, 7vw, 80px) 20px">
+    <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(25px, 3.6vw, 38px); color: #600109; margin: 0 0 32px; text-align: center; line-height: 1.35">
+      ಈ Masterclass ನಲ್ಲಿ ನೀವು ಕಲಿಯುವ ಪ್ರಮುಖ ವಿಷಯಗಳು
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px">
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ವಾಸ್ತುಶಾಸ್ತ್ರದ ನಿಜವಾದ ಅರ್ಥ ಹಾಗೂ ಮೂಲಭೂತ ತತ್ವಗಳು</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ಪಂಚಭೂತಗಳು (ಭೂಮಿ, ಜಲ, ಅಗ್ನಿ, ವಾಯು, ಆಕಾಶ) ಮತ್ತು ಅವುಗಳ ಪ್ರಭಾವ</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> 16 ದಿಕ್ಕುಗಳ ಮಹತ್ವ ಹಾಗೂ ಅವುಗಳ ಸರಿಯಾದ ಉಪಯೋಗ</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ಮಹಾವಾಸ್ತು (Mahavastu) ಹಾಗೂ ಆಯಗಳ ಪರಿಚಯ</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ಪ್ಲಾಟ್ ಆಯ್ಕೆ, ರಸ್ತೆ, ಇಳಿಜಾರು ಹಾಗೂ ಸುತ್ತಮುತ್ತಲಿನ ಪರಿಸರದ ಪ್ರಭಾವ</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ಮನೆಯ ಪ್ರಮುಖ ಭಾಗಗಳ ವಾಸ್ತು ನಿಯಮಗಳು ಹಾಗೂ ಸಾಮಾನ್ಯ ವಾಸ್ತು ದೋಷಗಳು</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> ಪರಿಣಾಮಕಾರಿ ವಾಸ್ತು ಪರಿಹಾರಗಳು ಹಾಗೂ ನೈಜ Case Studies</div>
+      <div style="background: #FFFFFF; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(96,1,9,0.12); font-size: 15.5px; line-height: 1.7; color: #2B0A0D"><b style="color: #600109">✔</b> Basic ರಿಂದ Advanced ವರೆಗೆ ಸಂಪೂರ್ಣ Vastu LMS Course Overview</div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div style="background: #FFFFFF; border-top: 1px solid rgba(96,1,9,0.1); border-bottom: 1px solid rgba(96,1,9,0.1); padding: clamp(48px, 7vw, 80px) 20px">
+    <div style="max-width: 1180px; margin: 0 auto">
+      <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(25px, 3.6vw, 38px); color: #600109; margin: 0 auto 8px; text-align: center; max-width: 860px; line-height: 1.35">
+        ಸಾವಿರಾರು ವಿದ್ಯಾರ್ಥಿಗಳು ಈಗಾಗಲೇ ನಮ್ಮೊಂದಿಗೆ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಕಲಿತಿದ್ದಾರೆ
+      </h2>
+      <p style="margin: 0 auto 36px; text-align: center; max-width: 700px; font-size: 15px; color: #4A2A22">
+        25+ ವರ್ಷಗಳ ಅನುಭವ • ಸಾವಿರಾರು ಯಶಸ್ವಿ ವಿದ್ಯಾರ್ಥಿಗಳು • ಸರಳ ಕನ್ನಡದಲ್ಲಿ ಗುಣಮಟ್ಟದ ತರಬೇತಿ
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px">
+        <sc-for list="{{ reviews }}" as="rev" hint-placeholder-count="5">
+          <div style="background: #FDF0DD; border-radius: 16px; padding: 22px 24px; border: 1px solid rgba(96,1,9,0.12); display: flex; flex-direction: column; gap: 10px">
+            <div style="color: #C9860A; font-size: 16px; letter-spacing: 2px">★★★★★</div>
+            <div style="font-size: 15px; line-height: 1.8; color: #2B0A0D">"{{ rev.text }}"</div>
+            <div style="margin-top: auto; font-weight: 700; color: #600109; font-size: 14.5px">— {{ rev.name }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top: 40px; background: #600109; border-radius: 18px; padding: clamp(26px, 4vw, 40px); text-align: center; color: #FDF0DD">
+        <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(22px, 3vw, 30px)">ಇನ್ನೂ ಯೋಚಿಸುತ್ತಿದ್ದೀರಾ?</div>
+        <div style="font-size: 16px; margin: 8px auto 20px; max-width: 560px; line-height: 1.7; opacity: 0.9">ನೂರಾರು ವಿದ್ಯಾರ್ಥಿಗಳಂತೆ ನೀವೂ ಇಂದು ₹99ಕ್ಕೆ Live Vastu Masterclass ಗೆ ಸೇರಿ.</div>
+        <a href="{{ regUrl }}" style="display: inline-block; background: #FDF0DD; color: #600109; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 19px; padding: 14px 36px; border-radius: 12px" style-hover="background: #FFFFFF; color: #600109">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="max-width: 780px; margin: 0 auto; padding: clamp(48px, 7vw, 80px) 20px 120px">
+    <h2 style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: clamp(25px, 3.6vw, 36px); color: #600109; margin: 0 0 28px; text-align: center">
+      ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು (FAQ)
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="7">
+        <div style="background: #FFFFFF; border: 1px solid rgba(96,1,9,0.15); border-radius: 12px; overflow: hidden">
+          <div onClick="{{ faq.toggle }}" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 20px; cursor: pointer; font-weight: 700; color: #600109; font-size: 16px" style-hover="background: rgba(96,1,9,0.04)">
+            <span>{{ faq.q }}</span>
+            <span style="font-size: 20px; flex-shrink: 0">{{ faq.icon }}</span>
+          </div>
+          <sc-if value="{{ faq.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 0 20px 16px; font-size: 15px; line-height: 1.8; color: #4A2A22">{{ faq.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top: 48px; text-align: center; font-size: 13px; color: #7A5A4A">
+      © 2026 ಸಚಿನ್ ಜೋಶಿ | Live Vastu Masterclass — ಎಲ್ಲಾ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.
+    </div>
+  </div>
+
+  <!-- Sticky bottom CTA -->
+  <div style="position: fixed; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-top: 2px solid #600109; padding: 10px 16px; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 50; box-shadow: 0 -6px 24px rgba(96,1,9,0.15)">
+    <div style="display: flex; align-items: baseline; gap: 8px">
+      <span style="font-size: 15px; color: #9A7A6A; text-decoration: line-through">₹999</span>
+      <span style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 24px; color: #600109">₹99</span>
+    </div>
+    <a href="{{ regUrl }}" style="background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 16px; padding: 10px 26px; border-radius: 10px; white-space: nowrap" style-hover="background: #7A0511; color: #FFFFFF">ಈಗಲೇ ನೋಂದಾಯಿಸಿ</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;registrationUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;#register&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
+  &quot;countdownTarget&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2026-07-17T20:00:00+05:30&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; }
+}">
+class Component extends DCLogic {
+  state = { now: Date.now(), openFaq: 0, showLeadModal: false, leadName: '', leadMobile: '', leadError: '' };
+  offerStart = null;
+
+  componentDidMount() {
+    this._t = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    this._popupT = setTimeout(() => {
+      this.offerStart = Date.now();
+      this.setState({ showLeadModal: true });
+    }, 6000);
+  }
+  componentWillUnmount() {
+    if (this._t) clearInterval(this._t);
+    if (this._popupT) clearTimeout(this._popupT);
+  }
+
+  onLeadNameInput = (e) => this.setState({ leadName: e.target.value, leadError: '' });
+  onLeadMobileInput = (e) => {
+    const digits = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    this.setState({ leadMobile: digits, leadError: '' });
+  };
+  closeLeadModal = () => this.setState({ showLeadModal: false });
+  submitLead = () => {
+    const name = this.state.leadName.trim();
+    const mobile = this.state.leadMobile;
+    if (!name) { this.setState({ leadError: 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಹೆಸರು ನಮೂದಿಸಿ' }); return; }
+    if (mobile.length !== 10) { this.setState({ leadError: 'ದಯವಿಟ್ಟು ಸರಿಯಾದ 10 ಅಂಕಿಗಳ ಮೊಬೈಲ್ ನಂಬರ್ ನಮೂದಿಸಿ' }); return; }
+    this.setState({ showLeadModal: false });
+    const base = this.props.registrationUrl ?? '#register';
+    if (base && base !== '#register') {
+      const sep = base.includes('?') ? '&' : '?';
+      window.location.href = base + sep + 'name=' + encodeURIComponent(name) + '&mobile=' + encodeURIComponent(mobile);
+    }
+  };
+
+  renderVals() {
+    const target = new Date(this.props.countdownTarget ?? '2026-07-17T20:00:00+05:30').getTime();
+    let diff = Math.max(0, target - this.state.now);
+    const pad = (n) => String(n).padStart(2, '0');
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000) % 24;
+    const mins = Math.floor(diff / 60000) % 60;
+    const secs = Math.floor(diff / 1000) % 60;
+
+    const offerRemaining = this.offerStart == null ? 300000 : Math.max(0, 300000 - (this.state.now - this.offerStart));
+    const offerMin = pad(Math.floor(offerRemaining / 60000));
+    const offerSec = pad(Math.floor(offerRemaining / 1000) % 60);
+
+    const faqData = [
+      { q: 'ವಾಸ್ತುಶಾಸ್ತ್ರದ ಪೂರ್ವ ಜ್ಞಾನ ಬೇಕೇ?', a: 'ಇಲ್ಲ. ಆರಂಭಿಕರೂ ಸುಲಭವಾಗಿ ಕಲಿಯಬಹುದು.' },
+      { q: 'Masterclass ಎಷ್ಟು ಸಮಯ ಇರುತ್ತದೆ?', a: '2 ಗಂಟೆಗಳ Live Zoom Session + Q&A.' },
+      { q: 'ನೋಂದಣಿ ಶುಲ್ಕ ಎಷ್ಟು?', a: 'ವಿಶೇಷ ಆಫರ್‌ನಲ್ಲಿ ಕೇವಲ ₹99 ಮಾತ್ರ.' },
+      { q: 'Zoom Link ಹೇಗೆ ಸಿಗುತ್ತದೆ?', a: 'ನೋಂದಣಿಯ ನಂತರ WhatsApp ಮತ್ತು Email ಮೂಲಕ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.' },
+      { q: 'ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಬಹುದೇ?', a: 'ಹೌದು. Live Q&A Session ಇರುತ್ತದೆ.' },
+      { q: 'Certificate ಸಿಗುತ್ತದೆಯೇ?', a: 'ಹೌದು. Participation Certificate ನೀಡಲಾಗುತ್ತದೆ.' },
+      { q: 'Masterclass ನಂತರ Full Course ಸೇರಬಹುದೇ?', a: 'ಹೌದು. ವಿಶೇಷ LMS Offer ನೀಡಲಾಗುತ್ತದೆ.' }
+    ];
+    const faqs = faqData.map((f, i) => ({
+      ...f,
+      open: this.state.openFaq === i,
+      icon: this.state.openFaq === i ? '−' : '+',
+      toggle: () => this.setState(s => ({ openFaq: s.openFaq === i ? -1 : i }))
+    }));
+
+    const reviews = [
+      { text: 'ಸಚಿನ್ ಜೋಶಿಯವರ ಬೋಧನಾ ಶೈಲಿ ತುಂಬಾ ಸರಳ ಮತ್ತು ಪ್ರಾಯೋಗಿಕವಾಗಿದೆ. ಈ Masterclass ಮೂಲಕ ವಾಸ್ತುಶಾಸ್ತ್ರದ ಮೂಲಭೂತ ತತ್ವಗಳನ್ನು ಸುಲಭವಾಗಿ ಅರ್ಥಮಾಡಿಕೊಂಡೆ.', name: 'ಸಂತೋಷ್ ಪಾಟೀಲ, ಬೆಳಗಾವಿ' },
+      { text: 'ಪಂಚಭೂತಗಳು, 16 ದಿಕ್ಕುಗಳು ಮತ್ತು ವಾಸ್ತು ನಿಯಮಗಳನ್ನು ಇಷ್ಟು ಸುಲಭವಾಗಿ ಯಾರೂ ವಿವರಿಸಿರಲಿಲ್ಲ. ಅತ್ಯುತ್ತಮ ಅನುಭವ.', name: 'ರಮೇಶ್ ಕುಲಕರ್ಣಿ, ಹುಬ್ಬಳ್ಳಿ' },
+      { text: 'ನೈಜ Case Studies ಮೂಲಕ ಕಲಿಸಿದ ವಿಧಾನ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು. ಈಗ ಗ್ರಾಹಕರಿಗೆ ಆತ್ಮವಿಶ್ವಾಸದಿಂದ ವಾಸ್ತು ಸಲಹೆ ನೀಡಲು ಸಾಧ್ಯವಾಗಿದೆ.', name: 'ಶಶಿಕಾಂತ್ ಜೋಶಿ, ವಿಜಯಪುರ' },
+      { text: 'Live ಪ್ರಶ್ನೋತ್ತರದಿಂದ ನನ್ನ ಎಲ್ಲ ಸಂದೇಹಗಳಿಗೆ ಸ್ಪಷ್ಟ ಉತ್ತರ ಸಿಕ್ಕಿತು. ಸಂಪೂರ್ಣ LMS Course ಸೇರಲು ಈ Masterclass ಉತ್ತಮ ಆರಂಭವಾಗಿದೆ.', name: 'ಸುನಿಲ್ ದೇಶಪಾಂಡೆ, ಧಾರವಾಡ' },
+      { text: 'ವೈಜ್ಞಾನಿಕ ಹಾಗೂ ಶಾಸ್ತ್ರೀಯ ದೃಷ್ಟಿಕೋನದಿಂದ ವಾಸ್ತು ಕಲಿಯಲು ಬಯಸುವವರಿಗೆ ಈ Masterclass ಖಂಡಿತವಾಗಿಯೂ ಉಪಯುಕ್ತವಾಗಿದೆ.', name: 'ಅಶೋಕ್ ಹೆಗಡೆ, ಬೆಂಗಳೂರು' }
+    ];
+
+    return {
+      cdDays: pad(days), cdHours: pad(hours), cdMins: pad(mins), cdSecs: pad(secs),
+      offerMin, offerSec,
+      regUrl: this.props.registrationUrl ?? '#register',
+      showLeadModal: this.state.showLeadModal,
+      leadName: this.state.leadName,
+      leadMobile: this.state.leadMobile,
+      leadError: this.state.leadError,
+      onLeadNameInput: this.onLeadNameInput,
+      onLeadMobileInput: this.onLeadMobileInput,
+      closeLeadModal: this.closeLeadModal,
+      submitLead: this.submitLead,
+      faqs, reviews
+    };
+  }
+}
+</script>
+</body>
+</html>
