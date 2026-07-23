@@ -50,23 +50,21 @@ Create one spreadsheet with two tabs, headers in row 1:
   and your integrated WhatsApp number. Edit `src/services/whatsapp.js` if
   your template has more/different variables than the single `body_1`
   placeholder assumed here.
-- **Google Sheets service account** (for the Funnel/Confirmed mirror):
-  1. Go to console.cloud.google.com, create a project (or reuse one).
-  2. Enable the "Google Sheets API" under APIs & Services > Library.
-  3. APIs & Services > Credentials > Create Credentials > Service Account.
-     Give it any name, no special roles needed.
-  4. Open the new service account > Keys > Add Key > Create new key > JSON.
-     Download it.
-  5. From that JSON file, copy `client_email` into
-     `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `private_key` into
-     `GOOGLE_PRIVATE_KEY` (keep the `\n` escapes as-is, they're unescaped in
-     code at runtime).
-  6. Create the Google Sheet with the two tabs described above, then click
-     Share and add the service account's email (the `client_email` value)
-     as an Editor.
-  7. Copy the spreadsheet ID out of its URL
-     (`docs.google.com/spreadsheets/d/<THIS_PART>/edit`) into
-     `GOOGLE_SHEETS_SPREADSHEET_ID`.
+- **Google Sheets via Apps Script** (for the Funnel/Confirmed mirror — no
+  Google Cloud project or service account needed):
+  1. Open the target spreadsheet, then Extensions > Apps Script.
+  2. Paste in the contents of `backend/deploy/apps-script/Code.gs`, and
+     replace `SHARED_SECRET`'s placeholder with a random string of your
+     choice — this same string goes into `SHEETS_WEBHOOK_SECRET` below.
+  3. Deploy > New deployment > type "Web app" > Execute as "Me" > Who has
+     access "Anyone". Deploy, then copy the Web app URL (ends in `/exec`).
+  4. Paste that URL into `SHEETS_WEBHOOK_URL`, and the secret from step 2
+     into `SHEETS_WEBHOOK_SECRET`.
+  5. If you later edit the script, redeploy via Deploy > Manage deployments
+     > edit (pencil) > New version — editing the code alone doesn't update
+     the live Web App.
+  The script auto-creates headers on first write; the first sheet tab
+  (leftmost) is treated as Funnel, the second tab as Confirmed.
 - **Hetzner VPS** — any small instance (Ubuntu) with Docker installed.
 - **Domain** — point an `api.` subdomain (e.g. `apivastu.your-domain.com`) at
   the Hetzner server's IP address, and update `.env`'s `FRONTEND_ORIGIN`
