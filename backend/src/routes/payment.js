@@ -59,7 +59,7 @@ async function markPaid({ leadId, paymentId }) {
   }).catch((err) => console.error("Sheets confirmed sync failed:", err.message));
 
   try {
-    await sendWhatsappConfirmation({ mobile: lead.mobile, name: lead.name });
+    await sendWhatsappConfirmation({ mobile: lead.mobile, name: lead.name, paymentId });
     await prisma.lead.update({ where: { id: leadId }, data: { whatsappSentAt: new Date() } });
   } catch (err) {
     // Payment already succeeded; a WhatsApp failure shouldn't fail the request.
