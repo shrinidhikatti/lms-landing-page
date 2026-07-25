@@ -1,5 +1,13 @@
 const MSG91_URL = "https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/";
 
+// Meta rejects any BODY text parameter over 30 characters (silently, with no
+// "Sent At" and no charge — looks identical to an account-level failure).
+// Truncating here is a safety net so unexpected long values (e.g. a very
+// long customer name) can't reintroduce this failure mode.
+function toParam(value) {
+  return String(value).slice(0, 30);
+}
+
 // Sends the MSG91 WhatsApp template "shri_v_m_joshi":
 //   Hi {{1}}, Your appointment is scheduled for {{2}}. Service: {{3}}
 //   Confirmation number: {{4}}.
@@ -24,10 +32,10 @@ async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
           {
             to: [`91${mobile}`],
             components: {
-              body_1: { type: "text", value: name },
-              body_2: { type: "text", value: eventDateTime },
-              body_3: { type: "text", value: "Live Vastu Masterclass with Sachin Joshi" },
-              body_4: { type: "text", value: confirmationRef },
+              body_1: { type: "text", value: toParam(name) },
+              body_2: { type: "text", value: toParam(eventDateTime) },
+              body_3: { type: "text", value: "Live Vastu Masterclass" },
+              body_4: { type: "text", value: toParam(confirmationRef) },
             },
           },
         ],
