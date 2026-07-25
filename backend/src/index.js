@@ -10,7 +10,12 @@ const paymentRouter = require("./routes/payment");
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_ORIGIN }));
+const allowedOrigins = (process.env.FRONTEND_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
 
 // Razorpay webhook needs the raw request body to verify its signature,
 // so it's registered before the global express.json() body parser below.
