@@ -20,24 +20,28 @@ app.use(cors({ origin: allowedOrigins }));
 // Razorpay webhook needs the raw request body to verify its signature,
 // so it's registered before the global express.json() body parser below.
 // This is a backup path in case the browser never reaches /api/payment/verify.
-app.post("/api/payment/webhook", express.raw({ type: "*/*" }), async (req, res) => {
-  const signature = req.get("x-razorpay-signature") || "";
-  const valid = verifyWebhookSignature({ rawBody: req.body, signature });
-  if (!valid) return res.status(400).json({ error: "Invalid webhook signature" });
+app.post("/api/payment/webhook", express.raw({ type: "*/*" }), async (req, res, next) => {
+  try {
+    const signature = req.get("x-razorpay-signature") || "";
+    const valid = verifyWebhookSignature({ rawBody: req.body, signature });
+    if (!valid) return res.status(400).json({ error: "Invalid webhook signature" });
 
-  const event = JSON.parse(req.body.toString("utf8"));
-  if (event.event === "payment.captured") {
-    const payment = event.payload.payment.entity;
-    const leadId = payment.notes?.leadId;
-    if (leadId) {
-      const lead = await prisma.lead.findUnique({ where: { id: leadId } });
-      if (lead && lead.status !== "paid") {
-        await paymentRouter.markPaid({ leadId, paymentId: payment.id });
+    const event = JSON.parse(req.body.toString("utf8"));
+    if (event.event === "payment.captured") {
+      const payment = event.payload.payment.entity;
+      const leadId = payment.notes?.leadId;
+      if (leadId) {
+        const lead = await prisma.lead.findUnique({ where: { id: leadId } });
+        if (lead && lead.status !== "paid") {
+          await paymentRouter.markPaid({ leadId, paymentId: payment.id });
+        }
       }
     }
-  }
 
-  res.json({ received: true });
+    res.json({ received: true });
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use(express.json());
@@ -45,6 +49,13 @@ app.use(express.json());
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/api/leads", leadsRouter);
 app.use("/api/payment", paymentRouter);
+
+// Safety net: logs the full error and always returns JSON instead of
+// letting an unhandled rejection crash the process.
+app.use((err, _req, res, _next) => {
+  console.error("Unhandled route error:", err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+});
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Backend listening on port ${port}`));
