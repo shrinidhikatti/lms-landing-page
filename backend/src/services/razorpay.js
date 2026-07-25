@@ -10,7 +10,8 @@ async function createOrder({ leadId, amountPaise }) {
   return razorpay.orders.create({
     amount: amountPaise,
     currency: "INR",
-    receipt: `lead_${leadId}`,
+    // Razorpay caps receipt at 40 chars; a UUID alone (36 chars) fits, "lead_" + UUID (41) doesn't.
+    receipt: leadId,
     notes: { leadId },
   });
 }
