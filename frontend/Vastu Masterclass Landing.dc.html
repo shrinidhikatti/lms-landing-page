@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="kn">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,17 +8,26 @@
 <body>
 <x-dc>
 <helmet>
+<title>ಸಚಿನ್ ಜೋಶಿ Live Vastu Masterclass — ಕೇವಲ ₹99</title>
+<meta name="description" content="ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿಯವರೊಂದಿಗೆ LIVE Vastu Masterclass. ವೈಜ್ಞಾನಿಕ ಹಾಗೂ ಶಾಸ್ತ್ರೀಯ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ಕಲಿಯಿರಿ. ಇಂದೇ ₹99ಕ್ಕೆ ನೋಂದಾಯಿಸಿ.">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Anek+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Anek+Kannada:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Anek+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
   html, body { margin: 0; padding: 0; background: #FDF0DD; }
   body { font-family: 'Anek Kannada', sans-serif; color: #2B0A0D; }
   a { color: #600109; }
   a:hover { color: #8A0A16; }
-  @keyframes pulseGlow { 0% { box-shadow: 0 6px 22px rgba(96,1,9,0.35); } 50% { box-shadow: 0 6px 32px rgba(96,1,9,0.6); } 100% { box-shadow: 0 6px 22px rgba(96,1,9,0.35); } }
+  @keyframes pulseGlow { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.04); } }
+  .cta-pulse { position: relative; }
+  .cta-pulse::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    box-shadow: 0 6px 28px rgba(96,1,9,0.55); z-index: -1; pointer-events: none;
+    animation: pulseGlow 2.5s ease-in-out infinite;
+  }
   @media (max-width: 780px) {
     .hero-photo { order: -1; max-width: 340px; margin: 0 auto; }
   }
@@ -64,7 +73,7 @@
 
         <input type="tel" placeholder="ಮೊಬೈಲ್ ನಂಬರ್ (Mobile Number)" value="{{ leadMobile }}" onInput="{{ onLeadMobileInput }}" style="width: 100%; box-sizing: border-box; background: #FDF0DD; border: 1.5px solid rgba(96,1,9,0.25); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'Anek Kannada', sans-serif; color: #2B0A0D; margin-bottom: 18px; outline: none">
 
-        <div onClick="{{ submitLead }}" style="text-align: center; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 15px 0; border-radius: 12px; cursor: pointer; opacity: {{ submitOpacity }}; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511">
+        <div onClick="{{ submitLead }}" class="cta-pulse" style="text-align: center; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 15px 0; border-radius: 12px; cursor: pointer; opacity: {{ submitOpacity }}" style-hover="background: #7A0511">
           {{ submitLabel }}
         </div>
 
@@ -74,7 +83,7 @@
         </div>
 
         <div style="display: flex; align-items: center; gap: 14px; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(96,1,9,0.12)">
-          <img src="uploads/image.png_2K_202607101321.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; border: 2px solid #600109; flex-shrink: 0">
+          <img src="uploads/image.png_2K_202607101321.webp" width="900" height="672" alt="ಸಚಿನ್ ಜೋಶಿ" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; border: 2px solid #600109; flex-shrink: 0">
           <div>
             <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 15px; color: #600109">ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿ</div>
             <div style="font-size: 12.5px; color: #4A2A22; font-weight: 600">🔴 LIVE • 07/08/2026 • ರಾತ್ರಿ 8:00</div>
@@ -140,7 +149,7 @@
         </div>
       </div>
 
-      <a onClick="{{ openLeadModal }}" style="display: block; text-align: center; background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 22px); padding: 16px 32px; border-radius: 14px; animation: pulseGlow 2.5s ease-in-out infinite" style-hover="background: #7A0511; color: #FFFFFF">
+      <a onClick="{{ openLeadModal }}" class="cta-pulse" style="display: block; text-align: center; background: #600109; color: #FDF0DD; text-decoration: none; cursor: pointer; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 22px); padding: 16px 32px; border-radius: 14px" style-hover="background: #7A0511; color: #FFFFFF">
         ಈಗಲೇ ನಿಮ್ಮ ಸ್ಥಾನ ಕಾಯ್ದಿರಿಸಿ →
       </a>
 
@@ -155,7 +164,7 @@
     <div class="hero-photo" style="flex: 0 1 400px; min-width: 290px; position: relative">
       <div style="background: #FFFFFF; border-radius: 20px; padding: 12px; box-shadow: 0 18px 50px rgba(96,1,9,0.18); border: 1px solid rgba(96,1,9,0.1)">
         <div style="position: relative; border-radius: 14px; overflow: hidden">
-          <img src="uploads/Living_room_studio_background_bl..._202607101351.jpeg" alt="ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
+          <img src="uploads/Living_room_studio_background_bl..._202607101351.webp" width="900" height="900" alt="ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
           <div style="position: absolute; top: 14px; right: -8px; background: #600109; color: #FDF0DD; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 18px; padding: 8px 18px; border-radius: 10px 0 0 10px; box-shadow: 0 6px 16px rgba(0,0,0,0.3)">₹99 ಮಾತ್ರ</div>
         </div>
         <div style="padding: 16px 10px 8px; text-align: center">
@@ -257,7 +266,7 @@
       </div>
 
       <div style="flex: 0 1 400px; min-width: 290px; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 18px 50px rgba(96,1,9,0.18)">
-        <img src="uploads/Living_room_studio_background_bl..._202607101354.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
+        <img src="uploads/Living_room_studio_background_bl..._202607101354.webp" width="900" height="672" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: auto">
         <div style="position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(43,5,8,0.92), rgba(43,5,8,0)); padding: 60px 22px 22px; color: #FDF0DD">
           <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; line-height: 1.5">ವಾಸ್ತು ಕ್ಷೇತ್ರದಲ್ಲಿ ನಿಮ್ಮ ಭವಿಷ್ಯವನ್ನು ನಿರ್ಮಿಸಿಕೊಳ್ಳಿ!</div>
           <div style="font-size: 14.5px; margin-top: 4px; opacity: 0.9">ಇಂದೇ ₹99ಕ್ಕೆ Live Masterclass ಗೆ ಸೇರಿ.</div>
@@ -283,7 +292,7 @@
       <div style="display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; align-items: stretch">
         <!-- Instructor card -->
         <div style="flex: 1 1 380px; min-width: 300px; max-width: 460px; background: #FDF0DD; color: #2B0A0D; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
-          <img src="uploads/image.png_2K_202607101321.jpeg" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: 300px; object-fit: cover; object-position: 50% 20%">
+          <img src="uploads/image.png_2K_202607101321.webp" width="900" height="672" alt="ಸಚಿನ್ ಜೋಶಿ" style="display: block; width: 100%; height: 300px; object-fit: cover; object-position: 50% 20%">
           <div style="padding: 22px 24px 26px">
             <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 26px; color: #600109">ಸಚಿನ್ ಜೋಶಿ</div>
             <div style="font-size: 14px; font-weight: 600; color: #4A2A22; margin-bottom: 18px">ವಾಸ್ತು ತಜ್ಞರು | ಜ್ಯೋತಿಷ್ಯ ತಜ್ಞರು | ತರಬೇತುದಾರರು</div>
