@@ -15,7 +15,7 @@ function toParam(value) {
 // MSG91's dashboard-managed templates don't use the old Meta WABA namespace
 // system, so namespace is sent as null (confirmed working via a live test).
 async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
-  const eventDateTime = process.env.MASTERCLASS_EVENT_DATETIME || "17/07/2026, 8:00 PM";
+  const eventDateTime = process.env.MASTERCLASS_EVENT_DATETIME || "07/08/2026, 8:00 PM";
   const confirmationRef = (paymentId || "").slice(-6).toUpperCase() || "PENDING";
 
   const payload = {
