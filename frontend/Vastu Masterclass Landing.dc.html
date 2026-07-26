@@ -11,7 +11,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: #FDF0DD; }
   body { font-family: 'Noto Sans Kannada', sans-serif; color: #2B0A0D; }
@@ -410,6 +409,20 @@
   &quot;apiBaseUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://apivastu.astrovastushrivmjoshi.com&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
   &quot;thankYouUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;thank-you.html&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; }
 }">
+let razorpayScriptPromise = null;
+function loadRazorpayScript() {
+  if (window.Razorpay) return Promise.resolve();
+  if (razorpayScriptPromise) return razorpayScriptPromise;
+  razorpayScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = resolve;
+    script.onerror = () => { razorpayScriptPromise = null; reject(new Error('Failed to load Razorpay')); };
+    document.head.appendChild(script);
+  });
+  return razorpayScriptPromise;
+}
+
 class Component extends DCLogic {
   state = { now: Date.now(), openFaq: 0, showLeadModal: false, leadName: '', leadMobile: '', leadError: '', leadSubmitting: false };
   offerStart = null;
@@ -419,6 +432,7 @@ class Component extends DCLogic {
     this._popupT = setTimeout(() => {
       this.offerStart = Date.now();
       this.setState({ showLeadModal: true });
+      loadRazorpayScript().catch(() => {});
     }, 6000);
   }
   componentWillUnmount() {
@@ -435,6 +449,7 @@ class Component extends DCLogic {
   openLeadModal = () => {
     if (this.offerStart == null) this.offerStart = Date.now();
     this.setState({ showLeadModal: true });
+    loadRazorpayScript().catch(() => {});
   };
 
   submitLead = async () => {
@@ -463,6 +478,8 @@ class Component extends DCLogic {
       });
       if (!orderRes.ok) throw new Error('order');
       const order = await orderRes.json();
+
+      await loadRazorpayScript();
 
       const razorpay = new window.Razorpay({
         key: order.keyId,
