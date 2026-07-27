@@ -22,9 +22,11 @@ function toParam(value) {
 // Leave MSG91_WHATSAPP_HEADER_IMAGE_URL blank to keep using template 1 -
 // this is the safe fallback if template 2 gets rejected by Meta or needs to
 // be reverted, no code change required, just the env vars.
-// NOTE: the header_1 shape below mirrors the body_N convention MSG91 already
-// uses for text params - verify it against MSG91's docs/a live test once
-// template 2 actually exists and is approved, before relying on it.
+// NOTE: MSG91 support confirmed the image header needs a nested "link"
+// (matching WhatsApp's own template component format: { type: "image",
+// image: { link: <url> } }), unlike the flat { type, value } shape used for
+// text body params. Still worth a live test once template 2 actually exists
+// and is approved - MSG91's example wasn't for this exact bulk API shape.
 async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
   const eventDateTime = process.env.MASTERCLASS_EVENT_DATETIME || "07/08/2026, 8:00 PM";
   const confirmationRef = (paymentId || "").slice(-6).toUpperCase() || "PENDING";
@@ -37,7 +39,7 @@ async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
     body_4: { type: "text", value: toParam(confirmationRef) },
   };
   if (headerImageUrl) {
-    components.header_1 = { type: "image", value: headerImageUrl };
+    components.header_1 = { type: "image", image: { link: headerImageUrl } };
   }
 
   const payload = {
