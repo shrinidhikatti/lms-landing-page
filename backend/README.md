@@ -46,10 +46,16 @@ Create one spreadsheet with two tabs, headers in row 1:
   `payment.captured` event, with a webhook secret.
 - **MSG91 WhatsApp** — create an approved WhatsApp message template in the
   MSG91 dashboard (business-initiated messages require a pre-approved
-  template — free-form text won't work). Note the template name, namespace,
-  and your integrated WhatsApp number. Edit `src/services/whatsapp.js` if
-  your template has more/different variables than the single `body_1`
-  placeholder assumed here.
+  template — free-form text won't work; MSG91's Template Library has
+  pre-vetted templates that skip Meta's review wait). Note the template
+  name and your integrated WhatsApp number — no namespace needed for
+  MSG91's dashboard-managed templates. Currently using `shri_v_m_joshi`
+  (text-only header, 4 body params: name, event date/time, class name,
+  confirmation ref). To switch to an image-header template (e.g. Sachin's
+  photo) later, see the `MSG91_WHATSAPP_HEADER_IMAGE_URL` comment in
+  `.env.example` and `src/services/whatsapp.js` — it's an opt-in env var
+  switch, not a code change, so reverting to the text-only template if
+  the image one gets rejected by Meta is just an env var edit.
 - **Google Sheets via Apps Script** (for the Funnel/Confirmed mirror — no
   Google Cloud project or service account needed):
   1. Open the target spreadsheet, then Extensions > Apps Script.
