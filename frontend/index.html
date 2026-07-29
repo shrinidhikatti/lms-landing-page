@@ -10,6 +10,23 @@
 <helmet>
 <title>ಸಚಿನ್ ಜೋಶಿ Live Vastu Masterclass — ಕೇವಲ ₹99</title>
 <meta name="description" content="ವಾಸ್ತು ತಜ್ಞ ಸಚಿನ್ ಜೋಶಿಯವರೊಂದಿಗೆ LIVE Vastu Masterclass. ವೈಜ್ಞಾನಿಕ ಹಾಗೂ ಶಾಸ್ತ್ರೀಯ ವಾಸ್ತುಶಾಸ್ತ್ರವನ್ನು ಸರಳ ಕನ್ನಡದಲ್ಲಿ ಕಲಿಯಿರಿ. ಇಂದೇ ₹99ಕ್ಕೆ ನೋಂದಾಯಿಸಿ.">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '959775847123891');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -524,7 +541,8 @@ class Component extends DCLogic {
               }),
             });
             if (!verifyRes.ok) throw new Error('verify');
-            window.location.href = `${this.props.thankYouUrl ?? 'thank-you.html'}?name=${encodeURIComponent(name)}`;
+            const amountRupees = (order.amount / 100).toFixed(2);
+            window.location.href = `${this.props.thankYouUrl ?? 'thank-you.html'}?name=${encodeURIComponent(name)}&amount=${amountRupees}`;
           } catch {
             this.setState({ leadSubmitting: false, leadError: 'ಪಾವತಿ ಪರಿಶೀಲನೆ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ.' });
           }
