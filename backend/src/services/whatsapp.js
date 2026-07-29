@@ -27,17 +27,31 @@ function toParam(value) {
 // image: { link: <url> } }), unlike the flat { type, value } shape used for
 // text body params. Still worth a live test once template 2 actually exists
 // and is approved - MSG91's example wasn't for this exact bulk API shape.
+//
+// Template 3 ("welcome" variant) has a different image (Joshi Institute
+// branded welcome graphic), an entirely different static body wrapped
+// around a single {{1}} name variable, and a static-URL "Join Community"
+// button (static URL buttons need no component in this payload at all -
+// they're baked into the approved template and render automatically).
+// Set MSG91_WHATSAPP_TEMPLATE_VARIANT=welcome + point
+// MSG91_WHATSAPP_TEMPLATE_NAME/MSG91_WHATSAPP_HEADER_IMAGE_URL at the new
+// template/image to switch; leave the variant unset to keep template 1/2
+// behavior (4 body params) untouched.
 async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
+  const variant = process.env.MSG91_WHATSAPP_TEMPLATE_VARIANT || "text";
   const eventDateTime = process.env.MASTERCLASS_EVENT_DATETIME || "07/08/2026, 8:00 PM";
   const confirmationRef = (paymentId || "").slice(-6).toUpperCase() || "PENDING";
   const headerImageUrl = process.env.MSG91_WHATSAPP_HEADER_IMAGE_URL || "";
 
-  const components = {
-    body_1: { type: "text", value: toParam(name) },
-    body_2: { type: "text", value: toParam(eventDateTime) },
-    body_3: { type: "text", value: "Live Vastu Masterclass" },
-    body_4: { type: "text", value: toParam(confirmationRef) },
-  };
+  const components =
+    variant === "welcome"
+      ? { body_1: { type: "text", value: toParam(name) } }
+      : {
+          body_1: { type: "text", value: toParam(name) },
+          body_2: { type: "text", value: toParam(eventDateTime) },
+          body_3: { type: "text", value: "Live Vastu Masterclass" },
+          body_4: { type: "text", value: toParam(confirmationRef) },
+        };
   if (headerImageUrl) {
     components.header_1 = { type: "image", image: { link: headerImageUrl } };
   }
