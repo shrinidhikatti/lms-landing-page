@@ -32,6 +32,40 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
   html, body { margin: 0; padding: 0; background: #FDF0DD; }
   body { font-family: 'Anek Kannada', sans-serif; color: #2B0A0D; }
   .card { max-width: 480px; margin: 0 auto; }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.7); }
+    70% { opacity: 1; transform: scale(1.04); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulseBtn {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,211,102,0.55); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(37,211,102,0); }
+  }
+  #waModalOverlay {
+    position: fixed; inset: 0; background: rgba(20,4,4,0.72);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box; z-index: 999;
+    animation: fadeIn 0.25s ease-out;
+  }
+  #waModalOverlay.show { display: flex; }
+  #waModalCard {
+    background: #FFFFFF; border: 3px solid #D32F2F; border-radius: 22px;
+    max-width: 380px; width: 100%; padding: 28px 24px 26px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+  #waModalClose {
+    position: absolute; top: 10px; right: 14px; font-size: 22px; font-weight: 700;
+    color: #B71C1C; background: none; border: none; cursor: pointer; line-height: 1;
+    padding: 4px;
+  }
+  #waModalJoinBtn { animation: pulseBtn 1.6s infinite; }
 </style>
 </head>
 <body>
@@ -48,13 +82,40 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
       </p>
 
       <div style="background: #FDF0DD; border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; text-align: left; font-size: 14.5px; font-weight: 600; color: #2B0A0D">
-        <div style="margin-bottom: 6px">📅 ದಿನಾಂಕ: 07/08/2026</div>
-        <div>⏰ ಸಮಯ: ರಾತ್ರಿ 8:00 (Live Zoom)</div>
+        <div style="margin-bottom: 6px">📅 ದಿನಾಂಕ: 14/08/2026</div>
+        <div>⏰ ಸಮಯ: ಸಂಜೆ 7:00 (Live Zoom)</div>
       </div>
 
-      <a href="index.html" style="display: inline-block; background: #600109; color: #FDF0DD; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 16px; padding: 12px 28px; border-radius: 12px">ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ</a>
+      <a href="https://chat.whatsapp.com/C9ORxI92LEMG1VBbrKAhoX" style="display: inline-block; background: #25D366; color: #FFFFFF; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 16px; padding: 12px 28px; border-radius: 12px; margin-bottom: 12px">✅ WhatsApp Group ಸೇರಿ</a>
+      <br>
+      <a href="index.html" style="display: inline-block; margin-top: 10px; color: #600109; text-decoration: underline; font-family: 'Anek Kannada', sans-serif; font-weight: 600; font-size: 14.5px">ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ</a>
     </div>
   </div>
+
+  <div id="waModalOverlay">
+    <div id="waModalCard">
+      <button id="waModalClose" aria-label="Close">✕</button>
+      <div style="font-size: 46px; margin-bottom: 10px">⚠️</div>
+      <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 800; font-size: 19px; color: #B71C1C; margin-bottom: 12px">
+        ಗಮನಿಸಿ!
+      </div>
+      <p style="font-size: 15px; line-height: 1.75; color: #4A2A22; font-weight: 600; margin: 0 0 20px">
+        ಕೆಳಗಿನ WhatsApp Group ಗೆ ಸೇರಿಕೊಳ್ಳಿ, ಅಲ್ಲಿಯೇ ನಿಮಗೆ Webinar Link ಕಳುಹಿಸಲಾಗುತ್ತದೆ. ಗ್ರೂಪ್ ಸೇರದಿದ್ದರೆ Link ಸಿಗುವುದಿಲ್ಲ!
+      </p>
+      <a id="waModalJoinBtn" href="https://chat.whatsapp.com/C9ORxI92LEMG1VBbrKAhoX" style="display: inline-block; background: #25D366; color: #FFFFFF; text-decoration: none; font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 17px; padding: 14px 30px; border-radius: 14px">✅ WhatsApp Group ಸೇರಿ</a>
+    </div>
+  </div>
+
+  <script>
+    var waOverlay = document.getElementById('waModalOverlay');
+    setTimeout(function () { waOverlay.classList.add('show'); }, 3000);
+    document.getElementById('waModalClose').addEventListener('click', function () {
+      waOverlay.classList.remove('show');
+    });
+    waOverlay.addEventListener('click', function (e) {
+      if (e.target === waOverlay) waOverlay.classList.remove('show');
+    });
+  </script>
 
   <script>
     var params = new URLSearchParams(window.location.search);

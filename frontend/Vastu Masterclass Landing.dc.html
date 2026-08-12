@@ -114,7 +114,7 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
           <img src="uploads/image.png_2K_202607101321.webp" width="900" height="672" alt="ಸಚಿನ್ ಜೋಶಿ" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; border: 2px solid #600109; flex-shrink: 0">
           <div>
             <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 15px; color: #600109">ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿ</div>
-            <div style="font-size: 12.5px; color: #4A2A22; font-weight: 600">🔴 LIVE • 07/08/2026 • ರಾತ್ರಿ 8:00</div>
+            <div style="font-size: 12.5px; color: #4A2A22; font-weight: 600">🔴 LIVE • 14/08/2026 • ಸಂಜೆ 7:00</div>
           </div>
         </div>
       </div>
@@ -199,8 +199,8 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
           <div style="font-family: 'Baloo Tamma 2', sans-serif; font-weight: 700; font-size: 20px; color: #600109">ಶ್ರೀ ಸಚಿನ್ ಜೋಶಿಯವರೊಂದಿಗೆ</div>
           <div style="font-weight: 700; font-size: 15px; letter-spacing: 1.5px; color: #2B0A0D; margin-top: 2px">LIVE VASTU MASTERCLASS</div>
           <div style="display: flex; justify-content: center; gap: 18px; margin-top: 10px; font-size: 14px; font-weight: 600; color: #4A2A22">
-            <span>📅 07/08/2026</span>
-            <span>⏰ ರಾತ್ರಿ 8:00</span>
+            <span>📅 14/08/2026</span>
+            <span>⏰ ಸಂಜೆ 7:00</span>
           </div>
         </div>
       </div>
@@ -212,11 +212,11 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
     <div class="info-grid" style="display: grid; gap: 16px">
       <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
         <span style="font-size: 28px">📅</span>
-        <div><div style="font-size: 13px; color: #7A5A4A">ದಿನಾಂಕ</div><div style="font-weight: 700; color: #600109; font-size: 17px">07/08/2026</div></div>
+        <div><div style="font-size: 13px; color: #7A5A4A">ದಿನಾಂಕ</div><div style="font-weight: 700; color: #600109; font-size: 17px">14/08/2026</div></div>
       </div>
       <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
         <span style="font-size: 28px">⏰</span>
-        <div><div style="font-size: 13px; color: #7A5A4A">ಸಮಯ</div><div style="font-weight: 700; color: #600109; font-size: 17px">ರಾತ್ರಿ 8:00</div></div>
+        <div><div style="font-size: 13px; color: #7A5A4A">ಸಮಯ</div><div style="font-weight: 700; color: #600109; font-size: 17px">ಸಂಜೆ 7:00</div></div>
       </div>
       <div style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; border: 1px solid rgba(96,1,9,0.12); display: flex; align-items: center; gap: 14px">
         <span style="font-size: 28px">⌛</span>
@@ -444,7 +444,7 @@ src="https://www.facebook.com/tr?id=959775847123891&ev=PageView&noscript=1"
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;registrationUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;#register&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
-  &quot;countdownTarget&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2026-08-07T20:00:00+05:30&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
+  &quot;countdownTarget&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2026-08-14T19:00:00+05:30&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
   &quot;apiBaseUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://apivastu.astrovastushrivmjoshi.com&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; },
   &quot;thankYouUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;thank-you.html&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Registration&quot; }
 }">
@@ -560,7 +560,7 @@ class Component extends DCLogic {
   };
 
   renderVals() {
-    const target = new Date(this.props.countdownTarget ?? '2026-08-07T20:00:00+05:30').getTime();
+    const target = new Date(this.props.countdownTarget ?? '2026-08-14T19:00:00+05:30').getTime();
     let diff = Math.max(0, target - this.state.now);
     const pad = (n) => String(n).padStart(2, '0');
     const days = Math.floor(diff / 86400000);
