@@ -16,6 +16,25 @@ async function createOrder({ leadId, amountPaise }) {
   });
 }
 
+// Payment Links surface the same "payment.captured" webhook event as Orders
+// (with notes.leadId carried through to the underlying payment), so the
+// existing webhook handler in index.js marks the lead paid automatically.
+async function createPaymentLink({ leadId, name, mobile, amountPaise, callbackUrl }) {
+  return razorpay.paymentLink.create({
+    amount: amountPaise,
+    currency: "INR",
+    accept_partial: false,
+    reference_id: leadId,
+    description: "Vastu Masterclass Registration",
+    customer: { name, contact: `+91${mobile}` },
+    notify: { sms: false, email: false },
+    reminder_enable: false,
+    notes: { leadId },
+    callback_url: callbackUrl,
+    callback_method: "get",
+  });
+}
+
 function verifyPaymentSignature({ orderId, paymentId, signature }) {
   const expected = crypto
     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -32,4 +51,4 @@ function verifyWebhookSignature({ rawBody, signature }) {
   return expected === signature;
 }
 
-module.exports = { createOrder, verifyPaymentSignature, verifyWebhookSignature };
+module.exports = { createOrder, createPaymentLink, verifyPaymentSignature, verifyWebhookSignature };

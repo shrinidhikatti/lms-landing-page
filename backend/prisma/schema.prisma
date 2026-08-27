@@ -14,7 +14,10 @@ model Lead {
   status             String  @default("lead") // lead | payment_initiated | paid
   razorpayOrderId    String?
   razorpayPaymentId  String?
+  razorpayPaymentLinkId String?
+  paymentLinkUrl     String?
   whatsappSentAt     DateTime?
+  reminderSentAt     DateTime?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

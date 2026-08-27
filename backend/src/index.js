@@ -7,6 +7,7 @@ const { verifyWebhookSignature } = require("./services/razorpay");
 
 const leadsRouter = require("./routes/leads");
 const paymentRouter = require("./routes/payment");
+const paymentReminderJob = require("./jobs/paymentReminder");
 
 const app = express();
 
@@ -59,3 +60,5 @@ app.use((err, _req, res, _next) => {
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Backend listening on port ${port}`));
+
+paymentReminderJob.start();

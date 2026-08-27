@@ -92,4 +92,58 @@ async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
   return res.json();
 }
 
-module.exports = { sendWhatsappConfirmation };
+// Sends the "still hasn't paid" reminder, fired ~2 min after a lead is
+// created if they haven't completed payment. Template needs a "Dynamic URL"
+// button with base URL https://rzp.io/rzp/ (confirmed against a real
+// Payment Link created in this Razorpay account - short_url format is
+// https://rzp.io/rzp/<code>) with a {{1}} variable appended; only the
+// "<code>" suffix is sent as button_1 here.
+async function sendPaymentReminder({ mobile, name, paymentLinkUrl }) {
+  const headerImageUrl = process.env.MSG91_WHATSAPP_REMINDER_HEADER_IMAGE_URL || "";
+  const buttonSuffix = paymentLinkUrl.slice(paymentLinkUrl.lastIndexOf("/") + 1);
+
+  const components = {
+    body_1: { type: "text", value: toParam(name) },
+    button_1: { type: "text", subtype: "url", value: buttonSuffix },
+  };
+  if (headerImageUrl) {
+    components.header_1 = { type: "image", image: { link: headerImageUrl } };
+  }
+
+  const payload = {
+    integrated_number: process.env.MSG91_WHATSAPP_INTEGRATED_NUMBER,
+    content_type: "template",
+    payload: {
+      messaging_product: "whatsapp",
+      type: "template",
+      template: {
+        name: process.env.MSG91_WHATSAPP_REMINDER_TEMPLATE_NAME,
+        language: { code: "en", policy: "deterministic" },
+        namespace: null,
+        to_and_components: [
+          {
+            to: [`91${mobile}`],
+            components,
+          },
+        ],
+      },
+    },
+  };
+
+  const res = await fetch(MSG91_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authkey: process.env.MSG91_AUTH_KEY,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`MSG91 reminder send failed (${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+module.exports = { sendWhatsappConfirmation, sendPaymentReminder };
