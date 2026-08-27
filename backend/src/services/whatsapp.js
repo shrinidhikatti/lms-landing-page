@@ -93,17 +93,16 @@ async function sendWhatsappConfirmation({ mobile, name, paymentId }) {
 }
 
 // Sends the "still hasn't paid" reminder, fired ~2 min after a lead is
-// created if they haven't completed payment. Template needs a "Dynamic URL"
-// button with base URL https://rzp.io/rzp/ (confirmed against a real
-// Payment Link created in this Razorpay account - short_url format is
-// https://rzp.io/rzp/<code>) with a {{1}} variable appended; only the
-// "<code>" suffix is sent as button_1 here.
-async function sendPaymentReminder({ mobile, name, paymentLinkUrl }) {
+// created if they haven't completed payment. Approved template
+// (vastu_payment_reminder_99_2min2) has a fully static body - no {{1}} -
+// so only the button URL suffix is sent as a param here. Button needs a
+// "Dynamic URL" with base https://rzp.io/rzp/ (confirmed against a real
+// Payment Link created in this Razorpay account) + {{1}} appended.
+async function sendPaymentReminder({ mobile, paymentLinkUrl }) {
   const headerImageUrl = process.env.MSG91_WHATSAPP_REMINDER_HEADER_IMAGE_URL || "";
   const buttonSuffix = paymentLinkUrl.slice(paymentLinkUrl.lastIndexOf("/") + 1);
 
   const components = {
-    body_1: { type: "text", value: toParam(name) },
     button_1: { type: "text", subtype: "url", value: buttonSuffix },
   };
   if (headerImageUrl) {

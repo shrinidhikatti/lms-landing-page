@@ -24,10 +24,10 @@ async function processDueReminders() {
   for (const lead of dueLeads) {
     try {
       const paymentLinkUrl = await getOrCreatePaymentLink(lead);
-      await sendPaymentReminder({ mobile: lead.mobile, name: lead.name, paymentLinkUrl });
+      await sendPaymentReminder({ mobile: lead.mobile, paymentLinkUrl });
       await prisma.lead.update({ where: { id: lead.id }, data: { reminderSentAt: new Date() } });
     } catch (err) {
-      console.error(`Payment reminder failed for lead ${lead.id}:`, err.message);
+      console.error(`Payment reminder failed for lead ${lead.id}:`, err.message || JSON.stringify(err));
     }
   }
 }
