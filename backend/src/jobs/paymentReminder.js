@@ -5,6 +5,11 @@ const { sendPaymentReminder } = require("../services/whatsapp");
 const CHECK_INTERVAL_MS = 30 * 1000;
 const REMINDER_DELAY_MS = 2 * 60 * 1000;
 
+// Only leads created after this process started are eligible - the existing
+// backlog of older unpaid leads is handled separately as a one-time bulk
+// send, not by this job, so it must never sweep them in.
+const JOB_START_TIME = new Date();
+
 async function processDueReminders() {
   if (!process.env.MSG91_WHATSAPP_REMINDER_TEMPLATE_NAME) return;
 
@@ -12,7 +17,7 @@ async function processDueReminders() {
     where: {
       status: { not: "paid" },
       reminderSentAt: null,
-      createdAt: { lte: new Date(Date.now() - REMINDER_DELAY_MS) },
+      createdAt: { gte: JOB_START_TIME, lte: new Date(Date.now() - REMINDER_DELAY_MS) },
     },
   });
 
