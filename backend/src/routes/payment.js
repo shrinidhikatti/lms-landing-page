@@ -48,12 +48,13 @@ async function getOrCreatePaymentLink(lead) {
 
   const amountPaise = Number(process.env.MASTERCLASS_PRICE_PAISE || 9900);
   const frontendOrigin = (process.env.FRONTEND_ORIGIN || "").split(",")[0].trim();
+  // The site is served from /vastu-workshop/ on Hostinger, not the domain root.
   const link = await createPaymentLink({
     leadId: lead.id,
     name: lead.name,
     mobile: lead.mobile,
     amountPaise,
-    callbackUrl: `${frontendOrigin}/thank-you.html?name=${encodeURIComponent(lead.name)}&amount=${amountPaise / 100}`,
+    callbackUrl: `${frontendOrigin}/vastu-workshop/thank-you.html?name=${encodeURIComponent(lead.name)}&amount=${amountPaise / 100}`,
   });
 
   await prisma.lead.update({
